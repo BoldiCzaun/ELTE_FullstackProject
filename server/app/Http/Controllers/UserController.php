@@ -54,6 +54,16 @@ class UserController extends Controller
         ]);
     }
 
+    public function logout(Request $request) {
+        // stateful app miatt
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->noContent();
+    }
+
     public function store(Request $request) {
         if(!Auth::hasUser()) {
             return response()->json([
