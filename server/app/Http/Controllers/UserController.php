@@ -16,7 +16,7 @@ class UserController extends Controller
             abort(403);
         }
 
-        return response();
+        return response()->noContent();
     }
 
     //
