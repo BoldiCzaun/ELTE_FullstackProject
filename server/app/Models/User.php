@@ -51,7 +51,7 @@ class User extends Authenticatable
     public function role(): HasOneThrough {
         return $this->hasOneThrough(
             Role::class,
-            UserRole::class,
+            RoleUser::class,
             'user_id',
             'id',
             'id',

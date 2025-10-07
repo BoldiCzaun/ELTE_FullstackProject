@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Role as EnumsRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use RuntimeException;
 
 class Role extends Model
@@ -34,5 +35,9 @@ class Role extends Model
 
     public function admin(): bool {
         return $this['role'] == EnumsRole::Admin;
+    }
+
+    public function users(): BelongsToMany {
+        return $this->belongsToMany(User::class);
     }
 }
