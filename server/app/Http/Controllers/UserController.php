@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function checkAuth() {
+        if(!Auth::hasUser()) {
+            abort(403);
+        }
+
+        return response();
+    }
+
     //
     public function login(Request $request) {
         $validated = $request->validate([

@@ -11,4 +11,5 @@ Route::get('/user', function (Request $request) {
 Route::post('/admin/createUser', [UserController::class, 'store'])
 ->middleware('auth:sanctum');
 
+Route::get('/checkauth', [UserController::class, 'checkAuth']);
 Route::post('/login', [UserController::class, 'login']);
