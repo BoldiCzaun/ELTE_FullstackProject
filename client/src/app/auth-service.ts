@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, catchError, map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
 
 type User = {
   id: number;
@@ -18,18 +19,104 @@ type LoginResponse = {
   providedIn: 'root'
 })
 export class AuthService {
-  private authToken: string | null = null;
+  private http = inject(HttpClient);
+  private user$ = new BehaviorSubject<User | null>(null);
 
+  // ezt a csrf ready dolgokat érdemes ellenőrizni
+  // ilyen login/logout fajta muveletek elott
+  // (loginhez muszaj)
+  private csrfReady: Observable<boolean>;
 
-  constructor(
-    private http: HttpClient
-  ) {}
+  constructor() {
+    this.csrfReady = this.http.get('/sanctum/csrf-cookie').pipe(
+      map(() => true),
+      catchError(err => {
+        console.error('csrf cookie fail', err);
+        return of(false);
+      }),
+      shareReplay(1)
+    );
 
-  tryLogin() {
-
+    this.checkAuth().subscribe(() => {
+      this.http.get<User>('/api/user').pipe(
+          tap(resp => {
+            this.user$.next(resp);
+          }),
+          catchError(err => {
+            console.error('failed to retrieve user while authenticated: ', err);
+            this.user$.next(null);
+            return of(false);
+          })
+        );
+    });
   }
 
-  isAuthenticated() {
-    return this.authToken != null;
+  get user() {
+    return this.user$;
+  }
+
+  private checkAuth() {
+    return this.csrfReady.pipe(
+      switchMap(csrfOk => {
+        if (!csrfOk) {
+          console.error("CSRF ERROR!!!");
+          return of(false);
+        }
+        return this.http.get('/api/checkAuth').pipe(
+          map(_ => true),
+          catchError(err => {
+            console.error('checkAuth failed?', err);
+            return of(false);
+          })
+        );
+      })
+    );
+  }
+
+  tryLogin(email: string, password: string) {
+    let form = new FormData();
+    form.append('email', email);
+    form.append('password', password);
+
+    return this.csrfReady.pipe(
+      switchMap(csrfOk => {
+        if (!csrfOk) {
+          console.error("CSRF ERROR!!!");
+          return of(false);
+        }
+        return this.http.post<LoginResponse>('/api/login', form).pipe(
+          tap(resp => {
+            this.user$.next(resp.user);
+          }),
+          map(_ => true),
+          catchError(err => {
+            console.error('login error', err);
+            this.user$.next(null);
+            return of(false);
+          })
+        );
+      })
+    );
+  }
+
+  logout() {
+    return this.csrfReady.pipe(
+      switchMap(csrfOk => {
+        if (!csrfOk) {
+          console.error("CSRF ERROR!!!");
+          return of(false);
+        }
+        return this.http.post('/logout', null).pipe(
+          tap(() => {
+            this.user$.next(null);
+          }),
+          map(_ => true),
+          catchError(err => {
+            console.error('logout error?', err);
+            return of(false);
+          })
+        );
+      })
+    );
   }
 }

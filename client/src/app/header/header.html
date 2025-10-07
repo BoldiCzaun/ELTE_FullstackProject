@@ -1,5 +1,11 @@
 <div>
-    <button>
-        Login
-    </button>
+    @if (user() != null) {
+        <p>{{user()?.name}}</p>
+        <button (click)="logout()">
+            Logout
+        </button>
+    }
+    @else {
+       <a href="/login">Login</a>
+    }
 </div>

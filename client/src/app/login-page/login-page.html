@@ -1,1 +1,11 @@
-<p>login-page works!</p>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <label for="email">Email: </label>
+  <input id="email" type="email" formControlName="email" />
+  <label for="password">Password: </label>
+  <input id="password" type="password" formControlName="password" />
+  <button type="submit">Login</button>
+</form>
+
+<p>{{this.emailError()}}</p>
+<p>{{this.passwordError()}}</p>
+<p>{{this.loginError()}}</p>
