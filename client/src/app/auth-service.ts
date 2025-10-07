@@ -21,7 +21,6 @@ type LoginResponse = {
 export class AuthService {
   private http = inject(HttpClient);
   private user$ = new BehaviorSubject<User | null>(null);
-
   // ezt a csrf ready dolgokat érdemes ellenőrizni
   // ilyen login/logout fajta muveletek elott
   // (loginhez muszaj)
@@ -53,6 +52,23 @@ export class AuthService {
 
   get user() {
     return this.user$;
+  }
+
+  checkAdmin() {
+    return this.csrfReady.pipe(
+      switchMap(csrfOk => {
+        if (!csrfOk) {
+          return of(false);
+        }
+        return this.http.get('/api/user/isAdmin').pipe(
+          map(_ => true),
+          catchError(err => {
+            console.log("not admin", err);
+            return of(false);
+          })
+        );
+      })
+    );
   }
 
   private checkAuth() {

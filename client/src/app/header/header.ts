@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../auth-service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -12,18 +13,13 @@ export class Header {
   protected authService = inject(AuthService);
   protected userName = signal("");
   protected user = toSignal(this.authService.user);
-
-  login(): void {
-    this.authService.tryLogin("test@example.com", "password").subscribe(() => {
-      let value = this.authService.user.getValue();
-      console.log(value);
-      if(value == null) return;
-
-      this.userName.set(value.name);
-    });
-  }
+  private router = inject(Router);
 
   logout(): void {
-    this.authService.logout().subscribe(()=>{});
+    this.authService.logout().subscribe(()=>this.router.navigate(['/login']));
+  }
+
+  toAdmin() {
+    this.router.navigate(['/admin']);
   }
 }
