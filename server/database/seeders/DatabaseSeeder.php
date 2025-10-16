@@ -6,7 +6,6 @@ use App\Enums\Role as EnumsRole;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\RoleUser;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -33,7 +32,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'admin',
             'email' => 'test@example.com',
         ]);
-        
+
         $admin_role->users()->attach($admin->id);
     }
 }

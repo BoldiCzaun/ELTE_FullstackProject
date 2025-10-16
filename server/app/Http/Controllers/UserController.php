@@ -8,9 +8,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    private const REGISTRABLE_ROLES = [EnumsRole::Student, EnumsRole::Teacher];
+
     public function checkAuth() {
         if(!Auth::hasUser()) {
             abort(403);
@@ -32,9 +35,7 @@ class UserController extends Controller
             'password' => 'Jelszó',
         ]);
 
-        $creds = $request->only('email', 'password');
-        
-        if (!Auth::attempt($creds)) {
+        if (!Auth::guard('web')->attempt($validated)) {
             return response()->json([
                 'message' => 'Hibás email vagy jelszó!',
             ], 401);
@@ -51,6 +52,7 @@ class UserController extends Controller
             'user' => $user,
             'token' => $token,
             'token_type' => 'Bearer',
+            'user_role' => $user->role(),
         ]);
     }
 
@@ -81,6 +83,7 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string',
+            'role' => 'required|' . Rule::in(array_map(fn($e) => $e->name, self::REGISTRABLE_ROLES)),
         ], [
             'required' => 'A :attribute mező kitöltése kötelező!',
             'string' => 'A :attribute mezőnek szövegesnek kell lennie!',
@@ -96,9 +99,7 @@ class UserController extends Controller
             'password' => Hash::make($validated['password'])
         ]);
 
-        // todo: egyelőre hardcodeolt hogy teacher, mivel az admin azokat csinálja
-        // idk a userek hogy lesznek..?
-        $role = Role::all()->where('role', '=', EnumsRole::Teacher)->first();
+        $role = Role::all()->where('role', $validated['role'])->firstOrFail();
         $role->users()->attach($user->id);
 
         return response()->json([
