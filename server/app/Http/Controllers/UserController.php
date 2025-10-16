@@ -52,7 +52,7 @@ class UserController extends Controller
             'user' => $user,
             'token' => $token,
             'token_type' => 'Bearer',
-            'user_role' => $user->role(),
+            'user_role' => $user->role?->role->name,
         ]);
     }
 

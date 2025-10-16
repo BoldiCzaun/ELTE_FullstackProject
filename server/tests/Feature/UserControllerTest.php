@@ -43,12 +43,12 @@ class UserControllerTest extends TestCase
         $this->assertEquals(RolesEnum::Teacher, $resUser->role?->role);
     }
 
-    public function testLogin()
+    public function testLoginAsTeacher()
     {
-        $testUserName = 'Login Test User 1';
-        $testEmail = 'login.testuser1@example.com';
+        $testUserName = 'Login Teacher';
+        $testEmail = 'login.teacher1@example.com';
         $testPassword = 'password';
-        $user = $this->createAndActAsUser($testUserName, $testEmail, $testPassword);
+        $this->createAndActAsTeacher($testUserName, $testEmail, $testPassword);
 
         $response = $this->post('/api/login', [
             'email' => $testEmail,
@@ -57,6 +57,28 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonStructure(['message', 'user', 'token', 'token_type', 'user_role']);
+        $this->assertEquals($testUserName, $response->json('user.name'));
+        $this->assertEquals($testEmail, $response->json('user.email'));
+        $this->assertEquals(RolesEnum::Teacher->name, $response->json('user.role.role'));
+    }
+
+    public function testLoginAsStudent()
+    {
+        $testUserName = 'Login Student';
+        $testEmail = 'login.student1@example.com';
+        $testPassword = 'password';
+        $this->createAndActAsStudent($testUserName, $testEmail, $testPassword);
+
+        $response = $this->post('/api/login', [
+            'email' => $testEmail,
+            'password' => $testPassword,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['message', 'user', 'token', 'token_type', 'user_role']);
+        $this->assertEquals($testUserName, $response->json('user.name'));
+        $this->assertEquals($testEmail, $response->json('user.email'));
+        $this->assertEquals(RolesEnum::Student->name, $response->json('user.role.role'));
     }
 
     protected function actingAsAdmin(): User
@@ -79,7 +101,7 @@ class UserControllerTest extends TestCase
         return $admin;
     }
 
-    private function createAndActAsUser(string $userName, string $email, string $password): User {
+    private function createAndActAsTeacher(string $userName, string $email, string $password): User {
         $this->actingAsAdmin();
         $payload = [
             'name' => $userName,
@@ -98,6 +120,31 @@ class UserControllerTest extends TestCase
         ]);
         $resUser = User::all()->where('name', $userName)->first();
         $this->assertEquals(RolesEnum::Teacher, $resUser->role?->role);
+
+        $this->actingAs($resUser);
+        return $resUser;
+    }
+
+    private function createAndActAsStudent(string $userName, string $email, string $password): User
+    {
+        $this->actingAsAdmin();
+        $payload = [
+            'name' => $userName,
+            'email' => $email,
+            'password' => $password,
+            'role' => RolesEnum::Student->name,
+        ];
+
+        $response = $this->post('/api/admin/createUser', $payload);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['message', 'user']);
+        $this->assertDatabaseHas('users', [
+            'name' => $userName,
+            'email' => $email,
+        ]);
+        $resUser = User::all()->where('name', $userName)->first();
+        $this->assertEquals(RolesEnum::Student, $resUser->role?->role);
 
         $this->actingAs($resUser);
         return $resUser;
