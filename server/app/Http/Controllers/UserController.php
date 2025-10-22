@@ -107,4 +107,14 @@ class UserController extends Controller
             'user' => $user
         ]);
     }
+
+    public function destroy(Request $request) {
+        $user = User::findOrFail($request->get('id'));
+        if(!Auth::user()->role->admin()) {
+            abort(401);
+        }
+
+        $user->delete();
+        return response()->noContent();
+    }
 }

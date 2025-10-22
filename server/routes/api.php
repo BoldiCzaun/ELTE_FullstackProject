@@ -52,8 +52,8 @@ Route::get('/user/isAdmin', function (Request $request) {
     return response()->noContent();
 })->middleware('auth:sanctum');
 
-Route::post('/user', [UserController::class, 'store'])
-->middleware('auth:sanctum');
+Route::post('/user', [UserController::class, 'store'])->middleware('auth:sanctum');
+Route::delete('/user', [UserController::class, 'destroy'])->middleware('auth:sanctum');
 
 Route::get('/checkAuth', [UserController::class, 'checkAuth']);
 Route::post('/login', [UserController::class, 'login']);
