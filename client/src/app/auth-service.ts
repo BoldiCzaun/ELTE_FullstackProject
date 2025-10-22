@@ -1,12 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-}
+import { User } from './user-service';
 
 type LoginResponse = {
   message: string;

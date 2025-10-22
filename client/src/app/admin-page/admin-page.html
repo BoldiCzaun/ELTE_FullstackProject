@@ -1,1 +1,13 @@
-<p>admin-page works!</p>
+<form [formGroup]="teacherCreationForm" (ngSubmit)="onSubmit()">
+  <label for="email">Email: </label>
+  <input id="email" type="email" formControlName="email" />
+  <label for="name">Name: </label>
+  <input id="name" type="text" formControlName="name" />
+  <label for="password">Password: </label>
+  <input id="password" type="password" formControlName="password" />
+  <button type="submit">Login</button>
+</form>
+
+@for (user of this.users(); track $index) {
+    <p>{{user.name}}</p>
+}
