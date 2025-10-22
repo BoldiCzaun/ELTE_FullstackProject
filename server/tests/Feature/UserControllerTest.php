@@ -31,7 +31,7 @@ class UserControllerTest extends TestCase
             'role' => RolesEnum::Teacher->name,
         ];
 
-        $response = $this->post('/api/admin/createUser', $payload);
+        $response = $this->post('/api/user', $payload);
 
         $response->assertStatus(200);
         $response->assertJsonStructure(['message', 'user']);
