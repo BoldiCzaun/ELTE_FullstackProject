@@ -29,6 +29,16 @@ export class UserService {
     );
   }
 
+  delete(id: number) {
+    return this.http.delete("/api/user?id=" + id).pipe(
+      map(_ => true),
+      catchError(err => {
+        console.log("user creation failed", err);
+        return of(false);
+      })
+    );
+  }
+
   getUsers(role: string | null) {
     let url = "/api/users";
     if(role) {

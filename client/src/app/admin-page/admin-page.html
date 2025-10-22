@@ -2,10 +2,13 @@
   <form [formGroup]="teacherCreationForm" (ngSubmit)="onSubmit()">
     <label for="email">Email: </label>
     <input id="email" type="email" formControlName="email" />
+    <p class="error-text">{{this.emailError()}}</p>
     <label for="name">Name: </label>
     <input id="name" type="text" formControlName="name" />
+    <p class="error-text">{{this.nameError()}}</p>
     <label for="password">Password: </label>
     <input id="password" type="password" formControlName="password" />
+    <p class="error-text">{{this.passwordError()}}</p>
     <button class="m-3 mb-0 button-generic" type="submit">Create Teacher</button>
   </form>
   <table class="m-4 gap-4 border-spacing-10 border-3 border-separate border-stone-100 rounded-xl table-auto">
@@ -22,7 +25,7 @@
           <tr>
             <td>{{user.email}}</td>
             <td>{{user.name}}</td>
-            <td></td>
+            <td><button class="button-critical" (click)="delete(user.id)">Delete</button></td>
           </tr>
       }
     </tbody>
