@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+.body-padding {
+    @apply p-4
+}
+
+.error-text {
+    @apply text-red-300
+}
+
+form {
+    @apply rounded bg-stone-100 w-50 flex flex-col items-center p-5
+}
+
+form input {
+    @apply rounded border-2 bg-white
+}
+
+.button-generic {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+}
+
+.button-critical {
+    @apply bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded;
+}

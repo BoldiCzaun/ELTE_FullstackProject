@@ -1,13 +1,30 @@
-<form [formGroup]="teacherCreationForm" (ngSubmit)="onSubmit()">
-  <label for="email">Email: </label>
-  <input id="email" type="email" formControlName="email" />
-  <label for="name">Name: </label>
-  <input id="name" type="text" formControlName="name" />
-  <label for="password">Password: </label>
-  <input id="password" type="password" formControlName="password" />
-  <button type="submit">Login</button>
-</form>
-
-@for (user of this.users(); track $index) {
-    <p>{{user.name}}</p>
-}
+<div class="flex justify-center  items-center flex-col">
+  <form [formGroup]="teacherCreationForm" (ngSubmit)="onSubmit()">
+    <label for="email">Email: </label>
+    <input id="email" type="email" formControlName="email" />
+    <label for="name">Name: </label>
+    <input id="name" type="text" formControlName="name" />
+    <label for="password">Password: </label>
+    <input id="password" type="password" formControlName="password" />
+    <button class="m-3 mb-0 button-generic" type="submit">Create Teacher</button>
+  </form>
+  <table class="m-4 gap-4 border-spacing-10 border-3 border-separate border-stone-100 rounded-xl table-auto">
+    <thead>
+      <tr>
+        <td>Email</td>
+        <td>Teacher Name</td>
+        <!-- "tárgyak" oszlop később maybe? -->
+        <td>Actions</td>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of this.users(); track $index) {
+          <tr>
+            <td>{{user.email}}</td>
+            <td>{{user.name}}</td>
+            <td></td>
+          </tr>
+      }
+    </tbody>
+  </table>
+</div>  

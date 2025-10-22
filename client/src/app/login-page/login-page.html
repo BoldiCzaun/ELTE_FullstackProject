@@ -1,11 +1,13 @@
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <label for="email">Email: </label>
-  <input id="email" type="email" formControlName="email" />
-  <label for="password">Password: </label>
-  <input id="password" type="password" formControlName="password" />
-  <button type="submit">Login</button>
-</form>
-
-<p>{{this.emailError()}}</p>
-<p>{{this.passwordError()}}</p>
-<p>{{this.loginError()}}</p>
+<div class="flex justify-center">  
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email" />
+    <p class="error-text">{{this.emailError()}}</p>
+    <label for="password">Password </label>
+    <input id="password" type="password" formControlName="password" />
+    <p class="error-text">{{this.passwordError()}}</p>
+    <button class="m-3 button-generic" type="submit">Login</button>
+    <p class="error-text">{{this.loginError()}}</p>
+  </form>
+</div>
+  

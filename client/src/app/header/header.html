@@ -1,12 +1,17 @@
-<div>
-    @if (user() != null) {
-        <p>{{user()?.name}}</p>
-        <button (click)="logout()">
-            Logout
-        </button>
-         <button (click)="toAdmin()">Admin Dashboard</button>
-    }
-    @else {
-       <a href="/login">Login</a>
-    }
+<div class="flex items-center justify-between bg-linear-30 from-sky-200 to-indigo-100">
+    <img class="h-18 w-30 object-scale-down pl-5 pr-10" src="placeholderlogo.png">
+    <div class="flex p-2 pr-10 gap-4 justify-around items-center ">
+        @if (user() != null) {
+            <button class="button-generic" (click)="toAdmin()">Admin Dashboard</button>
+            <div class="border-l-2">    
+                <b class="ml-4">{{user()?.name}}</b>
+            </div>
+            <button class="button-critical" (click)="logout()">
+                Logout
+            </button>
+        }
+        @else {
+           <a href="/login" class="button-generic">Login</a>
+        }
+    </div>
 </div>
