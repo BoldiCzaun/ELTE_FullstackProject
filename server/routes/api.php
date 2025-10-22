@@ -4,26 +4,22 @@ use App\Enums\Role as EnumsRole;
 use App\Http\Controllers\UserController;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-function isCurrUserAdmin(Request $request) {
-    return $request->user()->role->id == Role::all()->where('role', '=', EnumsRole::Admin)->first()->id;
-}
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
 Route::get('/roles', function (Request $request) {
-    if(!isCurrUserAdmin($request)) abort(403);
+    if(!$request->user()->isAdmin()) abort(403);
 
     return Role::all();
 })->middleware('auth:sanctum');
 
 Route::get('/role', function (Request $request, string $id) {
-    if(!isCurrUserAdmin($request)) abort(403);
+    if(!$request->user()->isAdmin()) abort(403);
 
     if(!$request->has('user_id')) {
         abort(400);
@@ -36,7 +32,7 @@ Route::get('/role', function (Request $request, string $id) {
 })->middleware('auth:sanctum')->where('id', '[0-9]+');
 
 Route::get('/users', function (Request $request) {
-    if(!isCurrUserAdmin($request)) abort(403);
+    if(!$request->user()->isAdmin()) abort(403);
 
     if($request->has('role')) {
         $role = Role::where('role', $request->get('role'))->first();
@@ -49,9 +45,7 @@ Route::get('/users', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/user/isAdmin', function (Request $request) {
-    $isAdmin = isCurrUserAdmin($request);
-    
-    if(!$isAdmin) {
+    if(!$request->user()->isAdmin()) {
         abort(403);
     }
 

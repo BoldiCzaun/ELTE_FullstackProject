@@ -59,4 +59,8 @@ class User extends Authenticatable
             'role_id'
         );
     }
+
+    public function isAdmin(): bool {
+        return $this->role->role == EnumsRole::Admin;
+    }
 }
