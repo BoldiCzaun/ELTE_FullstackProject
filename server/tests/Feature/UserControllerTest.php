@@ -19,16 +19,37 @@ class UserControllerTest extends TestCase
         $this->seed();
     }
 
-    public function testRegister()
+    public function testRegisterStudent()
     {
-        $this->actingAsAdmin();
-        $testUserName = 'Test User 1';
-        $testEmail = 'test.user1@example.com';
+        $testUserName = 'Test Student';
+        $testEmail = 'test.student@example.com';
         $payload = [
             'name' => $testUserName,
             'email' => $testEmail,
             'password' => 'password',
-            'role' => RolesEnum::Teacher->name,
+        ];
+
+        $response = $this->post('/api/user', $payload);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['message', 'user']);
+        $this->assertDatabaseHas('users', [
+            'name' => $testUserName,
+            'email' => $testEmail,
+        ]);
+        $resUser = User::all()->where('name', $testUserName)->first();
+        $this->assertEquals(RolesEnum::Student, $resUser->role?->role);
+    }
+
+    public function testRegisterTeacher()
+    {
+        $this->actingAsAdmin();
+        $testUserName = 'Test Teacher';
+        $testEmail = 'test.teacher@example.com';
+        $payload = [
+            'name' => $testUserName,
+            'email' => $testEmail,
+            'password' => 'password',
         ];
 
         $response = $this->post('/api/user', $payload);
@@ -46,9 +67,9 @@ class UserControllerTest extends TestCase
     public function testLoginAsTeacher()
     {
         $testUserName = 'Login Teacher';
-        $testEmail = 'login.teacher1@example.com';
+        $testEmail = 'login.teacher@example.com';
         $testPassword = 'password';
-        $this->createAndActAsTeacher($testUserName, $testEmail, $testPassword);
+        $this->createTeacher($testUserName, $testEmail, $testPassword);
 
         $response = $this->post('/api/login', [
             'email' => $testEmail,
@@ -65,9 +86,9 @@ class UserControllerTest extends TestCase
     public function testLoginAsStudent()
     {
         $testUserName = 'Login Student';
-        $testEmail = 'login.student1@example.com';
+        $testEmail = 'login.student@example.com';
         $testPassword = 'password';
-        $this->createAndActAsStudent($testUserName, $testEmail, $testPassword);
+        $this->createStudent($testUserName, $testEmail, $testPassword);
 
         $response = $this->post('/api/login', [
             'email' => $testEmail,
@@ -101,7 +122,7 @@ class UserControllerTest extends TestCase
         return $admin;
     }
 
-    private function createAndActAsTeacher(string $userName, string $email, string $password): User {
+    private function createTeacher(string $userName, string $email, string $password): User {
         $this->actingAsAdmin();
         $payload = [
             'name' => $userName,
@@ -121,13 +142,12 @@ class UserControllerTest extends TestCase
         $resUser = User::all()->where('name', $userName)->first();
         $this->assertEquals(RolesEnum::Teacher, $resUser->role?->role);
 
-        $this->actingAs($resUser);
+//        $this->actingAs($resUser);
         return $resUser;
     }
 
-    private function createAndActAsStudent(string $userName, string $email, string $password): User
+    private function createStudent(string $userName, string $email, string $password): User
     {
-        $this->actingAsAdmin();
         $payload = [
             'name' => $userName,
             'email' => $email,

@@ -41,7 +41,7 @@ class UserController extends Controller
             ], 401);
         }
 
-        $user = Auth::user();
+        $user = User::all()->where('email', $validated['email'])->first();
 
         $user->tokens()->delete();
 
@@ -67,23 +67,11 @@ class UserController extends Controller
     }
 
     public function store(Request $request) {
-        if(!Auth::hasUser()) {
-            return response()->json([
-                'message' => 'Nem vagy bejelentkezve!',
-            ], 403);
-        }
-
-        if(!Auth::user()->role->admin()) {
-            return response()->json([
-                'message' => 'Nem vagy admin!',
-            ], 403);
-        }
-
         $validated = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string',
-            'role' => 'required|' . Rule::in(array_map(fn($e) => $e->name, self::REGISTRABLE_ROLES)),
+//            'role' => 'required|' . Rule::in(array_map(fn($e) => $e->name, self::REGISTRABLE_ROLES)),
         ], [
             'required' => 'A :attribute mező kitöltése kötelező!',
             'string' => 'A :attribute mezőnek szövegesnek kell lennie!',
@@ -93,19 +81,50 @@ class UserController extends Controller
             'password' => 'Jelszó',
         ]);
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password'])
-        ]);
 
-        $role = Role::all()->where('role', $validated['role'])->firstOrFail();
-        $role->users()->attach($user->id);
+        if(!Auth::hasUser()) {
+            $user = $this->registerStudent($validated);
+
+            return response()->json([
+                'message' => 'Sikeres regisztráció!',
+                'user' => $user
+            ]);
+        }
+        if(!Auth::user()->role->admin()) {
+            return response()->json([
+                'message' => 'Nem vagy admin!',
+            ], 403);
+        }
+        $user = $this->registerTeacher($validated);
 
         return response()->json([
             'message' => 'Sikeres regisztráció!',
             'user' => $user
         ]);
+    }
+
+    protected function registerTeacher($data)
+    {
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password'])
+        ]);
+        $role = Role::all()->where('role', '=', EnumsRole::Teacher)->first();
+        $role->users()->attach($user->id);
+        return $user;
+    }
+
+    protected function registerStudent($data)
+    {
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password'])
+        ]);
+        $role = Role::all()->where('role', '=', EnumsRole::Student)->first();
+        $role->users()->attach($user->id);
+        return $user;
     }
 
     public function destroy(Request $request) {
