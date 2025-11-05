@@ -3,7 +3,7 @@
     <div class="flex p-2 pr-10 gap-4 justify-around items-center ">
         @if (user() != null) {
             <button class="button-generic" (click)="toAdmin()">Admin Dashboard</button>
-            <div class="border-l-2">    
+            <div class="border-l-2">
                 <b class="ml-4">{{user()?.name}}</b>
             </div>
             <button class="button-critical" (click)="logout()">
@@ -12,6 +12,7 @@
         }
         @else {
            <a href="/login" class="button-generic">Login</a>
+           <a href="/register" class="button-generic">Register</a>
         }
     </div>
 </div>
