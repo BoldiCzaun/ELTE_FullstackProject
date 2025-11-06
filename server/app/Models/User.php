@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use App\Enums\Role as EnumsRole;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -62,5 +64,17 @@ class User extends Authenticatable
 
     public function isAdmin(): bool {
         return $this->role->role == EnumsRole::Admin;
+    }
+
+    public function teacher_courses() : HasMany {
+        return $this->hasMany(Course::class);
+    }
+
+    public function student_courses() : BelongsToMany {
+        return $this->belongsToMany(Course::class);
+    }
+
+    public function scores(): HasMany {
+        return $this->hasMany(Score::class);
     }
 }

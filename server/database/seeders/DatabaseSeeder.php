@@ -34,5 +34,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $admin_role->users()->attach($admin->id);
+
+        $this->call([
+            UserSeeder::class,
+            CourseSeeder::class,
+            CourseUserSeeder::class,
+            RequirementSeeder::class,
+            ScoreSeeder::class
+        ]);
     }
 }

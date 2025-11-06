@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Role as EnumsRole;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\UserController;
 use App\Models\Role;
 use App\Models\User;
@@ -51,6 +52,19 @@ Route::get('/user/isAdmin', function (Request $request) {
 
     return response()->noContent();
 })->middleware('auth:sanctum');
+
+Route::get('/courses', [CourseController::class, 'getAll'])->middleware('auth:sanctum');
+Route::get('/courses/{id}', [CourseController::class, 'get'])->middleware('auth:sanctum');
+Route::post('/courses', [CourseController::class, 'store'])->middleware('auth:sanctum');
+Route::patch('/courses', [CourseController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->middleware('auth:sanctum');
+
+Route::get('/courses/{id}/requirements', [CourseController::class, 'getRequirements'])->middleware('auth:sanctum');
+
+Route::post('/user/courses/{id}', [UserController::class, 'takeCourse'])->middleware('auth:sanctum');
+Route::get('/user/courses', [UserController::class, 'getCourses'])->middleware('auth:sanctum');
+
+Route::get('/user/scores', [UserController::class, 'getScores'])->middleware('auth:sanctum');
 
 Route::post('/user', [UserController::class, 'store']);
 Route::delete('/user', [UserController::class, 'destroy'])->middleware('auth:sanctum');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Role as EnumsRole;
+use App\Models\Course;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,6 +14,61 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     private const REGISTRABLE_ROLES = [EnumsRole::Student, EnumsRole::Teacher];
+
+    public function takeCourse(string $id) {
+        if(!Auth::hasUser()) {
+            abort(401, 'Nem vagy bejelentkezve!');
+        }
+
+        if(!Auth::user()->role->student()) {
+            abort(401, 'Nem vagy diák!');
+        }
+
+        $course = Course::findOrFail($id);
+
+        if($course->students()->count() >= $course->max_student) {
+            abort(403, 'Már elérte a tárgy a maximum diák számot!');
+        }
+
+        if(!Auth::user()->student_courses()
+            ->where('course_id', $id)
+            ->get()
+            ->isEmpty()
+        ) {
+            abort(403, 'Már felvetted a tárgyat!');
+        }
+
+        Auth::user()->student_courses()->attach($id);
+
+        return response()->noContent();
+    }
+
+    public function getCourses() {
+        if(!Auth::hasUser()) {
+            abort(403, 'Nem vagy bejelentkezve!');
+        }
+
+        if(Auth::user()->role->teacher()) {
+            return response()->json(Auth::user()->teacher_courses()->get());
+        }
+        if(!Auth::user()->role->student()) {
+            abort(403, 'Nem vagy diák!');
+        }
+        
+        return response()->json(Auth::user()->student_courses()->get());
+    }
+
+    public function getScores() {
+        if(!Auth::hasUser()) {
+            abort(403, 'Nem vagy bejelentkezve!');
+        }
+
+        if(!Auth::user()->role->student()) {
+            abort(403, 'Nem vagy diák!');
+        }
+        
+        return response()->json(Auth::user()->scores()->get());
+    }
 
     public function checkAuth() {
         if(!Auth::hasUser()) {
