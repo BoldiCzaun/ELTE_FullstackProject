@@ -1,0 +1,20 @@
+<div class="flex justify-center">
+  <form [formGroup]="userCreationForm" (ngSubmit)="onSubmit()">
+    <label for="email">Email: </label>
+    <input id="email" type="email" formControlName="email" />
+    <p class="error-text">{{this.emailError()}}</p>
+    <label for="name">Name: </label>
+    <input id="name" type="text" formControlName="name" />
+    <p class="error-text">{{this.nameError()}}</p>
+    <label for="password">Password: </label>
+    <input id="password" type="password" formControlName="password" />
+    <p class="error-text">{{this.passwordError()}}</p>
+    <button class="m-3 mb-0 button-generic" type="submit">
+      @if(user() != null){
+        Create Teacher
+      } @else {
+        Register Student
+      }
+    </button>
+  </form>
+</div>
