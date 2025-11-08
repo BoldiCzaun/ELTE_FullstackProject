@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class CourseController extends Controller
 {
     public function get(string $id) {
-        $course = Course::findOrFail($id);
+        $course = Course::withCount('students')->findOrFail($id);
 
         if(!Auth::hasUser()) {
             return abort(401, 'Nem vagy bejelentkezve!');
@@ -28,6 +28,23 @@ class CourseController extends Controller
         }
 
         return response()->json($course);
+    }
+
+    public function getStudents(string $id) {
+        $course = Course::findOrFail($id);
+
+        if(!Auth::hasUser()) {
+            return abort(401, 'Nem vagy bejelentkezve!');
+        }
+
+        if(!Auth::user()->role->teacher()) {
+            return abort(401, 'Nem vagy tanár!');
+        }
+        else if(Auth::user()->id != $course->user_id) {
+            return abort(401, 'Nem a saját kurzusod!');
+        }
+
+        return response()->json($course->students()->get());
     }
 
     public function getRequirements(string $id) {
@@ -57,7 +74,7 @@ class CourseController extends Controller
             return abort(401, 'Nem vagy bejelentkezve!');
         }
 
-        return response()->json(Course::all());
+        return response()->json(Course::withCount('students')->get());
     }
 
     public function store(Request $request) {

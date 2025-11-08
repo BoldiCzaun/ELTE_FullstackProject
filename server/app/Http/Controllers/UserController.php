@@ -49,13 +49,21 @@ class UserController extends Controller
         }
 
         if(Auth::user()->role->teacher()) {
-            return response()->json(Auth::user()->teacher_courses()->get());
+            return response()->json(Auth::user()
+                ->teacher_courses()
+                ->withCount('students')
+                ->get()
+            );
         }
         if(!Auth::user()->role->student()) {
             abort(403, 'Nem vagy diák!');
         }
         
-        return response()->json(Auth::user()->student_courses()->get());
+        return response()->json(Auth::user()
+            ->student_courses()
+            ->withCount('students')
+            ->get()
+        );
     }
 
     public function getScores() {

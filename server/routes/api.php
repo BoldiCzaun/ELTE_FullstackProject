@@ -59,6 +59,7 @@ Route::post('/courses', [CourseController::class, 'store'])->middleware('auth:sa
 Route::patch('/courses', [CourseController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->middleware('auth:sanctum');
 
+Route::get('/courses/{id}/students', [CourseController::class, 'getStudents'])->middleware('auth:sanctum');
 Route::get('/courses/{id}/requirements', [CourseController::class, 'getRequirements'])->middleware('auth:sanctum');
 
 Route::post('/user/courses/{id}', [UserController::class, 'takeCourse'])->middleware('auth:sanctum');
