@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, EventEmitter, inject, Output, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {UserService} from '../user-service';
 import {BehaviorSubject} from 'rxjs';
@@ -14,13 +14,15 @@ import {toSignal} from '@angular/core/rxjs-interop';
   styleUrl: './register-page.css'
 })
 export class RegisterPage {
+  @Output() onRegister: EventEmitter<any> = new EventEmitter();
+
   protected authService = inject(AuthService);
   protected user = toSignal(this.authService.user);
 
-  protected emailError = signal('');
-  protected nameError = signal('');
-  protected passwordError = signal('');
-  protected creationError = signal('');
+  public emailError = signal('');
+  public nameError = signal('');
+  public passwordError = signal('');
+  public creationError = signal('');
 
   protected userCreationForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -66,7 +68,7 @@ export class RegisterPage {
         'Teacher'
       ).subscribe(success => {
         if(success) {
-          this.refresh$.next();
+          this.onRegister.emit();
           return;
         }
 
