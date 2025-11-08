@@ -13,6 +13,7 @@ export class Header {
   protected authService = inject(AuthService);
   protected userName = signal("");
   protected user = toSignal(this.authService.user);
+  protected role = toSignal(this.authService.role);
   private router = inject(Router);
 
   logout(): void {
@@ -21,5 +22,9 @@ export class Header {
 
   toAdmin() {
     this.router.navigate(['/admin']);
+  }
+
+  toCreateCourses() {
+    this.router.navigate(['/courses/new']);
   }
 }

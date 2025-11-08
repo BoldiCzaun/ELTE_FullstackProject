@@ -1,0 +1,16 @@
+<div class="flex flex-row justify-between m-3 items-center">
+    <p class="text-3xl p-3">{{this.course()?.name}}</p>
+    <button class="button-generic">Edit</button>
+</div>
+
+<hr>
+
+<p class="p-3">{{this.course()?.description}}</p>
+
+<p class="text-xl">Requirements (placeholder)</p>
+
+@for (req of this.requirements(); track $index) {
+    <hr>
+    {{req.name}}, {{req.begin}}, {{req.total_score_weight}}, {{req.repeat_count}}, {{req.repeat_skip}}
+}
+<hr>

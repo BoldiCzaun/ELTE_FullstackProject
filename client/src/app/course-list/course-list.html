@@ -1,0 +1,7 @@
+@if (role() != null) {
+    @if(role() == 'Teacher') {
+        @for (item of this.courses(); track $index) {
+            <app-course-item [course]="item"/>
+        }
+    }
+}

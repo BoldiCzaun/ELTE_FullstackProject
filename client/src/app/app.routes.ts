@@ -5,6 +5,9 @@ import { authGuard } from './auth-guard';
 import { MainPage } from './main-page/main-page';
 import { adminGuard } from './admin-guard';
 import {RegisterPage} from './register-page/register-page';
+import { CoursePage } from './course-page/course-page';
+import { teacherGuard } from './teacher-guard';
+import { CreateCoursePage } from './create-course-page/create-course-page';
 
 export const routes: Routes = [
     {
@@ -22,6 +25,18 @@ export const routes: Routes = [
       path: 'register',
       component: RegisterPage,
       title: "Regisztráció"
+    },
+    {
+        path: 'courses/new',
+        component: CreateCoursePage,
+        title: "Tárgy készités",
+        canActivate: [authGuard, teacherGuard]
+    },
+    {
+        path: 'course/:id',
+        component: CoursePage,
+        title: "Tárgy nézet",
+        canActivate: [authGuard, teacherGuard]
     },
     {
         path: 'admin',

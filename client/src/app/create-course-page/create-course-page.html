@@ -1,0 +1,19 @@
+<div class="flex justify-center">
+  <form [formGroup]="courseCreationForm" (ngSubmit)="onSubmit()">
+    <label for="name">Name: </label>
+    <input id="name" type="text" formControlName="name" />
+    <p class="error-text">{{this.nameError()}}</p>
+
+    <label for="description">Description: </label>
+    <textarea id="description" formControlName="description" rows="5" cols="20"></textarea>
+
+    <label for="maxStudent">Max students: </label>
+    <input id="maxStudent" type="number" min="1" formControlName="maxStudent" />
+
+    <button class="m-3 mb-0 button-generic" type="submit">
+        Create Course
+    </button>
+
+    <p class="error-text">{{this.creationError()}}</p>
+  </form>
+</div>

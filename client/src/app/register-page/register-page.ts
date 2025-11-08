@@ -19,10 +19,10 @@ export class RegisterPage {
   protected authService = inject(AuthService);
   protected user = toSignal(this.authService.user);
 
-  public emailError = signal('');
-  public nameError = signal('');
-  public passwordError = signal('');
-  public creationError = signal('');
+  protected emailError = signal('');
+  protected nameError = signal('');
+  protected passwordError = signal('');
+  protected creationError = signal('');
 
   protected userCreationForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),

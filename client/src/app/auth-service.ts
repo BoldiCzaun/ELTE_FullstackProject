@@ -8,6 +8,7 @@ type LoginResponse = {
   user: User;
   token: string;
   token_type: string;
+  user_role: string;
 }
 
 @Injectable({
@@ -16,6 +17,7 @@ type LoginResponse = {
 export class AuthService {
   private http = inject(HttpClient);
   private user$ = new BehaviorSubject<User | null>(null);
+  private role$ = new BehaviorSubject<string | null>(null);
   // ezt a csrf ready dolgokat érdemes ellenőrizni
   // ilyen login/logout fajta muveletek elott
   // (loginhez muszaj)
@@ -43,6 +45,10 @@ export class AuthService {
           })
         );
     });
+  }
+
+  get role() {
+    return this.role$;
   }
 
   get user() {
@@ -98,11 +104,13 @@ export class AuthService {
         return this.http.post<LoginResponse>('/api/login', form).pipe(
           tap(resp => {
             this.user$.next(resp.user);
+            this.role$.next(resp.user_role);
           }),
           map(_ => true),
           catchError(err => {
             console.error('login error', err);
             this.user$.next(null);
+            this.role$.next(null);
             return of(false);
           })
         );
