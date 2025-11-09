@@ -8,6 +8,7 @@ import {RegisterPage} from './register-page/register-page';
 import { CoursePage } from './course-page/course-page';
 import { teacherGuard } from './teacher-guard';
 import { CreateCoursePage } from './create-course-page/create-course-page';
+import { ScoresPage } from './scores-page/scores-page';
 
 export const routes: Routes = [
     {
@@ -36,6 +37,12 @@ export const routes: Routes = [
         path: 'course/:id',
         component: CoursePage,
         title: "Tárgy nézet",
+        canActivate: [authGuard, teacherGuard]
+    },
+    {
+        path: 'course/:id/:req_id/scores',
+        component: ScoresPage,
+        title: "Pontok nézet",
         canActivate: [authGuard, teacherGuard]
     },
     {

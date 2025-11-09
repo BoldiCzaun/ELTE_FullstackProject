@@ -1,0 +1,20 @@
+<div class="flex justify-center  items-center flex-col">
+  <table class="m-4 gap-4 border-spacing-10 border-3 border-separate border-stone-100 rounded-xl table-auto">
+    <thead>
+      <tr>
+        <td>Score</td>
+        <td>Student</td>
+        <td>Requirement Num (optional)</td>
+      </tr>
+    </thead>
+    <tbody>
+      @for (score of this.scores(); track $index) {
+          <tr>
+            <td>{{score.score}}</td>
+            <td>{{score.user_name}}</td>
+            <td>{{score.requirement_num}}</td>
+          </tr>
+      }
+    </tbody>
+  </table>
+</div>

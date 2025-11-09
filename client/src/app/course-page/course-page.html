@@ -12,5 +12,6 @@
 @for (req of this.requirements(); track $index) {
     <hr>
     {{req.name}}, {{req.begin}}, {{req.total_score_weight}}, {{req.repeat_count}}, {{req.repeat_skip}}
+    <button class="button-generic" (click)="openScores(req.course_id, req.id)">View Scores</button>
 }
 <hr>

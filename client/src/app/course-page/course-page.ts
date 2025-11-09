@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Course, CourseService, Requirement } from '../course-service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-course-page',
@@ -10,6 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class CoursePage {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   protected courseService = inject(CourseService);
 
   protected requirements = signal<Requirement[] | null>(null);
@@ -32,5 +34,9 @@ export class CoursePage {
       this.requirements.set(v);
       console.log(v);
     });
+  }
+
+  protected openScores(id: number, req_id: number) {
+    this.router.navigate(["course", id, req_id, "scores"]);
   }
 }

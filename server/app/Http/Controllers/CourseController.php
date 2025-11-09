@@ -69,6 +69,23 @@ class CourseController extends Controller
         return response()->json($course->requirements()->get());
     }
 
+    public function getScores(string $id, string $req_id) {
+        $course = Course::findOrFail($id);
+
+        if(!Auth::hasUser()) {
+            return abort(401, 'Nem vagy bejelentkezve!');
+        }
+
+        if(!Auth::user()->role->teacher()) {
+            return abort(401, 'Nem vagy tanár!');
+        }
+        else if(Auth::user()->id != $course->user_id) {
+            return abort(401, 'Nem a saját kurzusod!');
+        }
+
+        return response()->json($course->requirements()->findOrFail($req_id)->scores()->get());
+    }
+
     public function getAll(Request $request) {
         if(!Auth::hasUser()) {
             return abort(401, 'Nem vagy bejelentkezve!');

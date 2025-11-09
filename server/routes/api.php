@@ -62,6 +62,8 @@ Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->middleware
 Route::get('/courses/{id}/students', [CourseController::class, 'getStudents'])->middleware('auth:sanctum');
 Route::get('/courses/{id}/requirements', [CourseController::class, 'getRequirements'])->middleware('auth:sanctum');
 
+Route::get('/courses/{id}/requirements/{req_id}/scores', [CourseController::class, 'getScores'])->middleware('auth:sanctum');
+
 Route::post('/user/courses/{id}', [UserController::class, 'takeCourse'])->middleware('auth:sanctum');
 Route::get('/user/courses', [UserController::class, 'getCourses'])->middleware('auth:sanctum');
 

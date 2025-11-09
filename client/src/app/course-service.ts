@@ -22,6 +22,15 @@ export type Requirement = {
   total_score_weight: number
 }
 
+export type Score = {
+  id: number,
+  score: number,
+  user_id: number,
+  requirement_id: number,
+  requirement_num: number | null,
+  user_name: string | null
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -57,6 +66,19 @@ export class CourseService {
       }),
       catchError(err => {
         console.log("getCourse failed", err);
+        return of(null);
+      })
+    );
+  }
+
+  getCourseScores(id: string, req_id: string) {
+    let url = "/api/courses/" + id + "/requirements/" + req_id + "/scores";
+    return this.http.get<Score[]>(url).pipe(
+      tap(resp => {
+        return of(resp);
+      }),
+      catchError(err => {
+        console.log("getCourseScores failed", err);
         return of(null);
       })
     );
