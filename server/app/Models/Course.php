@@ -24,6 +24,8 @@ class Course extends Model
         'user_id'
     ];
 
+    protected $appends = ['students_count'];
+
     public function students(): BelongsToMany {
         return $this->belongsToMany(User::class);
     }
@@ -34,5 +36,9 @@ class Course extends Model
 
     public function requirements(): HasMany {
         return $this->hasMany(Requirement::class);
+    }
+
+    public function getStudentsCountAttribute() {
+        return $this->students() ? $this->students()->count() : null;
     }
 }

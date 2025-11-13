@@ -51,7 +51,6 @@ class UserController extends Controller
         if(Auth::user()->role->teacher()) {
             return response()->json(Auth::user()
                 ->teacher_courses()
-                ->withCount('students')
                 ->get()
             );
         }
@@ -61,7 +60,6 @@ class UserController extends Controller
         
         return response()->json(Auth::user()
             ->student_courses()
-            ->withCount('students')
             ->get()
         );
     }
