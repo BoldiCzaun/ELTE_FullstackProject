@@ -4,6 +4,7 @@ import {UserService} from '../user-service';
 import {BehaviorSubject} from 'rxjs';
 import {AuthService} from '../auth-service';
 import {toSignal} from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-page',
@@ -15,6 +16,8 @@ import {toSignal} from '@angular/core/rxjs-interop';
 })
 export class RegisterPage {
   @Output() onRegister: EventEmitter<any> = new EventEmitter();
+
+  protected router = inject(Router);
 
   protected authService = inject(AuthService);
   protected user = toSignal(this.authService.user);
@@ -68,7 +71,9 @@ export class RegisterPage {
         'Teacher'
       ).subscribe(success => {
         if(success) {
-          this.onRegister.emit();
+          // gyors hack hogy ne redirecteljen az admin pagen
+          if (this.onRegister.observed) this.onRegister.emit();
+          else this.router.navigate(['/login']);
           return;
         }
 
