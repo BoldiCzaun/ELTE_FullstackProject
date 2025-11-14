@@ -3,11 +3,14 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, map, of, tap } from 'rxjs';
 import { User } from './user-service';
 
-export type Course = {
-  id: number,
+export type CourseData = {
   name: string,
-  max_student: number,
   description: string | null,
+  max_student: number,
+}
+
+export type Course = CourseData & {
+  id: number,
   user_id: number,
   students_count: number
 };
@@ -22,12 +25,15 @@ export type Requirement = {
   total_score_weight: number
 }
 
-export type Score = {
-  id: number,
+export type ScoreData = {
   score: number,
   user_id: number,
-  requirement_id: number,
   requirement_num: number | null,
+}
+
+export type Score = ScoreData & {
+  id: number,
+  requirement_id: number,
   user_name: string | null
 }
 
@@ -53,6 +59,64 @@ export class CourseService {
       map(_ => true),
       catchError(err => {
         console.log("user creation failed", err);
+        return of(false);
+      })
+    );
+  }
+
+  update(course_id: string, course_data: CourseData) {
+    let formData = new FormData();
+
+    formData.append("name", course_data.name);
+    if(course_data.description) formData.append("description", course_data.description);
+    formData.append("max_student", course_data.max_student.toString());
+    formData.append("_method", "PATCH");
+
+    const url = "/api/courses/" + course_id;
+    return this.http.post<Course>(url, formData).pipe(
+      tap(resp => {
+        return of(resp);
+      }),
+      catchError(err => {
+        console.log(url + " failed", err);
+        return of(null);
+      })
+    );
+  }
+
+  updateScore(course_id: string, req_id: string, score_id: string, score: number) {
+    let formData = new FormData();
+
+    formData.append("score", score.toString());
+    formData.append("_method", "PATCH");
+
+    let url = "/api/courses/" + course_id + "/requirements/" + req_id + "/scores/" + score_id;
+
+    return this.http.post(url, formData).pipe(
+      map(_ => true),
+      catchError(err => {
+        console.log("updateScore failed", err);
+        return of(false);
+      })
+    );
+  }
+
+  storeScore(course_id: string, req_id: string, score: ScoreData) {
+    let formData = new FormData();
+
+    formData.append("score", score.score.toString());
+    formData.append("user_id", score.user_id.toString());
+
+    if(score.requirement_num != null) {
+      formData.append("requirement_num", score.requirement_num.toString());
+    }
+
+    let url = "/api/courses/" + course_id + "/requirements/" + req_id + "/scores";
+
+    return this.http.post(url, formData).pipe(
+      map(_ => true),
+      catchError(err => {
+        console.log("storeScore failed", err);
         return of(false);
       })
     );

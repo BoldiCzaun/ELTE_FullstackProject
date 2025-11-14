@@ -1,17 +1,49 @@
+
 <div class="flex flex-row justify-between m-3 items-center">
-    <p class="text-3xl p-3">{{this.course()?.name}}</p>
-    <button class="button-generic">Edit</button>
+    @if (this.isEditing()) {
+        <input type="text" [(ngModel)]="editName"/>
+        <button class="button-generic" (click)="saveEdit()">Save</button>
+    }
+    @else {
+        <p class="text-3xl p-3">{{this.course()?.name}}</p>
+        <button class="button-generic" (click)="startEdit()">Edit</button>
+    }
 </div>
 
 <hr>
 
-<p class="p-3">{{this.course()?.description}}</p>
-
-<p class="text-xl">Requirements (placeholder)</p>
-
-@for (req of this.requirements(); track $index) {
-    <hr>
-    {{req.name}}, {{req.begin}}, {{req.total_score_weight}}, {{req.repeat_count}}, {{req.repeat_skip}}
-    <button class="button-generic" (click)="openScores(req.course_id, req.id)">View Scores</button>
+@if (this.isEditing()) {
+    <textarea rows="4" cols="100" [(ngModel)]="editDescription">
+    </textarea>
 }
-<hr>
+@else {
+    <p class="p-3">{{this.course()?.description}}</p>
+}
+
+<p class="p-3 text-3xl">Requirements</p>
+
+<table class="m-4 gap-4 border-spacing-10 border-3 border-separate border-stone-100 rounded-xl table-auto">
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Start Date</td>
+        <td>Repeat Count</td>
+        <td>Weeks In-between</td>
+        <td>Score Weight</td>
+        <td>Actions</td>
+      </tr>
+    </thead>
+    <tbody>
+      @for (req of this.requirements(); track $index) {
+          <tr>
+            <td>{{req.name}}</td>
+            <td>{{req.begin}}</td>
+            <td>{{req.repeat_count ?? '-'}}</td>
+            <td>{{req.repeat_skip ?? '-'}}</td>
+            <td>{{req.total_score_weight * 100}}%</td>
+            <td><button class="button-generic" (click)="openScores(req.course_id, req.id)">View Scores</button></td>
+          </tr>
+      }
+    </tbody>
+</table>
+
