@@ -56,13 +56,18 @@ Route::get('/user/isAdmin', function (Request $request) {
 Route::get('/courses', [CourseController::class, 'getAll'])->middleware('auth:sanctum');
 Route::get('/courses/{id}', [CourseController::class, 'get'])->middleware('auth:sanctum');
 Route::post('/courses', [CourseController::class, 'store'])->middleware('auth:sanctum');
-Route::patch('/courses', [CourseController::class, 'update'])->middleware('auth:sanctum');
+Route::patch('/courses/{id}', [CourseController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->middleware('auth:sanctum');
 
 Route::get('/courses/{id}/students', [CourseController::class, 'getStudents'])->middleware('auth:sanctum');
+
 Route::get('/courses/{id}/requirements', [CourseController::class, 'getRequirements'])->middleware('auth:sanctum');
+Route::post('/courses/{id}/requirements', [CourseController::class, 'storeRequirements'])->middleware('auth:sanctum');
 
 Route::get('/courses/{id}/requirements/{req_id}/scores', [CourseController::class, 'getScores'])->middleware('auth:sanctum');
+Route::post('/courses/{id}/requirements/{req_id}/scores', [CourseController::class, 'storeScores'])->middleware('auth:sanctum');
+
+Route::patch('/courses/{id}/requirements/{req_id}/scores/{score_id}', [CourseController::class, 'updateScores'])->middleware('auth:sanctum');
 
 Route::post('/user/courses/{id}', [UserController::class, 'takeCourse'])->middleware('auth:sanctum');
 Route::get('/user/courses', [UserController::class, 'getCourses'])->middleware('auth:sanctum');

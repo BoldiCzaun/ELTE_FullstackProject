@@ -13,6 +13,7 @@ class Score extends Model
     protected $fillable = [
         'score',
         'requirement_num',
+        'requirement_id',
         'user_id'
     ];
 

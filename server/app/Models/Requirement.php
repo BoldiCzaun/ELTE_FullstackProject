@@ -21,7 +21,8 @@ class Requirement extends Model
         'begin',
         'repeat_count',
         'repeat_skip',
-        'total_score_weight'
+        'total_score_weight',
+        'course_id'
     ];
 
     /**
