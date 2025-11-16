@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, RedirectCommand, Router, UrlTree } from '@angular/router';
+import { CanActivateFn, RedirectCommand, Router } from '@angular/router';
 import { AuthService } from './auth-service';
 
 export const authGuard: CanActivateFn = (route, state) => {
@@ -7,6 +7,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const urlTree = router.parseUrl('/login');
 
+  console.log(authService.user.getValue())
   if(!authService.user.getValue()) {
     return new RedirectCommand(urlTree, { skipLocationChange: true });
   }

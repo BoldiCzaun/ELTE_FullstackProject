@@ -27,4 +27,8 @@ export class Header {
   toCreateCourses() {
     this.router.navigate(['/courses/new']);
   }
+
+  toPickCourses() {
+    this.router.navigate(['/courses']);
+  }
 }

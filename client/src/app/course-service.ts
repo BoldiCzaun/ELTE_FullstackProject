@@ -135,6 +135,11 @@ export class CourseService {
     );
   }
 
+  getAllCourses() {
+    let url = "/api/courses";
+    return this.http.get(url)
+  }
+
   getCourseScores(id: string, req_id: string) {
     let url = "/api/courses/" + id + "/requirements/" + req_id + "/scores";
     return this.http.get<Score[]>(url).pipe(
@@ -147,7 +152,7 @@ export class CourseService {
       })
     );
   }
-  
+
   getUserCourses() {
     let url = "/api/user/courses";
     return this.http.get<Course[]>(url).pipe(
@@ -184,6 +189,20 @@ export class CourseService {
       }),
       catchError(err => {
         console.error("getStudents failed", err);
+        return of(null);
+      })
+    );
+  }
+
+  takeCourse(id: string) {
+    let url = "/api/user/courses/" + id;
+
+    return this.http.post(url, null).pipe(
+      tap(resp => {
+        return of(resp);
+      }),
+      catchError(err => {
+        console.error("getRequirements failed", err);
         return of(null);
       })
     );

@@ -1,0 +1,3 @@
+@for (course of this.courses(); track $index) {
+  <app-course-item [course]="course" [isUserCourse]="this.isUserCourse(course)" (taken)="this.onCourseTaken($event)"/>
+}
