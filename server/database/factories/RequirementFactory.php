@@ -20,7 +20,7 @@ class RequirementFactory extends Factory
 
         return [
             'name' => fake()->word(),
-            'begin' => fake()->date(),
+            'begin' => fake()->dateTimeBetween('now', '+12 weeks'),
             'repeat_count' => $doesntHaveRepeat ? null : fake()->numberBetween(1, 9),
             'repeat_skip' => (!$doesntHaveRepeat && fake()->boolean(25)) ? fake()->numberBetween(0,2) : null
         ];

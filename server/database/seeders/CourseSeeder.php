@@ -23,12 +23,13 @@ class CourseSeeder extends Seeder
             $query->where('role_id', $role['id']);
         })->get();
 
-        // todo: ne legyen ugyanaz a tanáré mindegyik
-        // (probléma: útólag nem tudok hozzáadni random usereket mert készitéskor kell)
-        Course::factory()
-            ->count(20)
-            ->create([
-                'user_id' => fake()->randomElement($users)['id']
-            ]);
+        $count = fake()->numberBetween(20, 35);
+        for($i = 0; $i < $count; $i++) {
+            Course::factory()
+                ->create([
+                    'user_id' => fake()->randomElement($users)['id']
+                ]);
+        }
+        
     }
 }
