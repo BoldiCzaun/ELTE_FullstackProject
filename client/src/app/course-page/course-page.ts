@@ -2,10 +2,11 @@ import { Component, inject, signal } from '@angular/core';
 import { Course, CourseData, CourseService, Requirement } from '../course-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-course-page',
-  imports: [FormsModule],
+  imports: [FormsModule, DatePipe],
   templateUrl: './course-page.html',
   styleUrl: './course-page.css'
 })

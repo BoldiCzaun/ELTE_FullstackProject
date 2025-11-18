@@ -37,7 +37,7 @@
       @for (req of this.requirements(); track $index) {
           <tr>
             <td>{{req.name}}</td>
-            <td>{{req.begin}}</td>
+            <td>{{req.begin | date : "dd/MM/yy HH:mm:ss"}}</td>
             <td>{{req.repeat_count ?? '-'}}</td>
             <td>{{req.repeat_skip ?? '-'}}</td>
             <td>{{req.total_score_weight * 100}}%</td>
