@@ -108,6 +108,18 @@ export class CourseService {
     );
   }
 
+  deleteRequirements(course_id: string, req_id: string) {
+    let url = "/api/courses/" + course_id + "/requirements/" + req_id;
+
+    return this.http.delete(url).pipe(
+      map(_ => true),
+      catchError(err => {
+        console.log(url + " failed", err);
+        return of(false);
+      })
+    );
+  }
+
   updateScore(course_id: string, req_id: string, score_id: string, score: number) {
     let formData = new FormData();
 

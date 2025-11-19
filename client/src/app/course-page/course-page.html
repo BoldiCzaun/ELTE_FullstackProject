@@ -32,6 +32,7 @@
       [courseID]='(this.course()?.id ?? 0).toString()'
       [requirement]='req'
       (onSave)='this.refresh$.next()'
+      (onDelete)='this.refresh$.next()'
     />
 }
 

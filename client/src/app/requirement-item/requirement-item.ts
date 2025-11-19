@@ -17,13 +17,16 @@ export class RequirementItem {
   protected router = inject(Router);
   protected courseService = inject(CourseService);
 
+  protected isDeleting = signal(false);
   protected isEdited = signal(false);
+
   protected editName: string = '';
   protected editDate: string = '';
   protected editTotalWeight: number = 0;
   protected editError = signal('');
 
-  @Output() onSave = new EventEmitter<Requirement>();
+  @Output() onSave = new EventEmitter();
+  @Output() onDelete = new EventEmitter();
 
   protected startRequirementEdit() { 
     this.isEdited.set(true);
@@ -60,6 +63,15 @@ export class RequirementItem {
       if(!v) return;
       
       this.onSave.emit();
+    });
+  }
+
+  protected deleteRequirement() {
+    this.courseService.deleteRequirements(this.courseID(), this.requirement().id.toString()).subscribe(v => {
+      if(!v) return;
+      
+      this.isDeleting.set(false);
+      this.onDelete.emit();
     });
   }
 
