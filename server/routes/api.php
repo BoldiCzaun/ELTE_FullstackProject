@@ -63,6 +63,7 @@ Route::get('/courses/{id}/students', [CourseController::class, 'getStudents'])->
 
 Route::get('/courses/{id}/requirements', [CourseController::class, 'getRequirements'])->middleware('auth:sanctum');
 Route::post('/courses/{id}/requirements', [CourseController::class, 'storeRequirements'])->middleware('auth:sanctum');
+Route::patch('/courses/{id}/requirements/{req_id}', [CourseController::class, 'updateRequirements'])->middleware('auth:sanctum');
 
 Route::get('/courses/{id}/requirements/{req_id}/scores', [CourseController::class, 'getScores'])->middleware('auth:sanctum');
 Route::post('/courses/{id}/requirements/{req_id}/scores', [CourseController::class, 'storeScores'])->middleware('auth:sanctum');

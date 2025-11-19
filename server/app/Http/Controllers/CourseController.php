@@ -193,6 +193,38 @@ class CourseController extends Controller
         return response()->json(Course::all());
     }
 
+    public function updateRequirements(Request $request, string $id, string $req_id) {
+        $course = Course::findOrFail($id);
+
+        if(!Auth::hasUser()) {
+            return abort(401, 'Nem vagy bejelentkezve!');
+        }
+
+        if(!Auth::user()->role->teacher()) {
+            return abort(401, 'Nem vagy tanár!');
+        }
+        if(Auth::user()->id != $course->user_id) {
+            return abort(401, 'Nem a saját kurzusod!');
+        }
+
+        $requirement = $course->requirements()->findOrFail($req_id);
+
+        $validated = $request->validate([
+            'name' => 'string',
+            'begin' => 'date',
+            'total_score_weight' => 'numeric|min:0|max:1'
+        ], [
+            'required' => 'A :attribute mező kitöltése kötelező!',
+            'string' => 'A :attribute mezőnek szövegesnek kell lennie!',
+            'integer' => 'A :attribute mezőnek egész számnak kell lennie!',
+            'exists' => 'A felhasználó nem létezik!'
+        ], []);
+
+        $requirement->update($validated);
+
+        return response()->json($requirement);
+    }
+
     public function storeRequirements(Request $request, string $id) {
         $course = Course::findOrFail($id);
 
