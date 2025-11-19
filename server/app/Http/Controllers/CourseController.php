@@ -68,7 +68,7 @@ class CourseController extends Controller
             return abort(401, 'Nem a saját kurzusod!');
         }
 
-        return response()->json($course->requirements()->get());
+        return response()->json($course->requirements()->orderBy('created_at', 'DESC')->get());
     }
 
     public function getScores(string $id, string $req_id) {
