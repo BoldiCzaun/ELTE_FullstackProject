@@ -15,14 +15,17 @@ export type Course = CourseData & {
   students_count: number
 };
 
-export type Requirement = {
-  id: number,
+export type RequirementData = {
   name: string,
-  course_id: number,
   begin: string,
-  repeat_count: number | null,
-  repeat_skip: number | null,
   total_score_weight: number
+  repeat_count: number | null,
+  repeat_skip: number | null
+}
+
+export type Requirement = RequirementData & {
+  id: number,
+  course_id: number,
 }
 
 export type ScoreData = {
@@ -84,6 +87,27 @@ export class CourseService {
     );
   }
 
+  updateRequirements(course_id: string, req_id: string, requirementData: RequirementData) {
+    let formData = new FormData();
+
+    formData.append("name", requirementData.name);
+    formData.append("begin", requirementData.begin);
+    formData.append("total_score_weight", requirementData.total_score_weight.toString());
+    formData.append("_method", "PATCH");
+
+    let url = "/api/courses/" + course_id + "/requirements/" + req_id;
+
+    return this.http.post<Requirement>(url, formData).pipe(
+      tap(resp => {
+        return of(resp);
+      }),
+      catchError(err => {
+        console.log(url + " failed", err);
+        return of(null);
+      })
+    );
+  }
+
   updateScore(course_id: string, req_id: string, score_id: string, score: number) {
     let formData = new FormData();
 
@@ -96,6 +120,28 @@ export class CourseService {
       map(_ => true),
       catchError(err => {
         console.log("updateScore failed", err);
+        return of(false);
+      })
+    );
+  }
+
+  storeRequirement(course_id: string, requirementData: RequirementData) {
+    let formData = new FormData();
+
+    formData.append("name", requirementData.name);
+    formData.append("begin", requirementData.begin);
+    if(requirementData.repeat_count != null)
+      formData.append("repeat_count", requirementData.repeat_count.toString());
+    if(requirementData.repeat_skip != null)
+      formData.append("repeat_skip", requirementData.repeat_skip.toString());
+    formData.append("total_score_weight", requirementData.total_score_weight.toString());
+
+    let url = "/api/courses/" + course_id + "/requirements";
+
+    return this.http.post(url, formData).pipe(
+      map(_ => true),
+      catchError(err => {
+        console.log("storeRequirement failed", err);
         return of(false);
       })
     );

@@ -1,11 +1,11 @@
-<div class="rounded-md flex flex-row justify-between bg-gray-200 p-5 m-10">
-    <div class="flex flex-col">
-        <h2 class="text-xl">{{this.course.name}}</h2>
-        <p class="truncate">{{this.course.description}}</p>
+<div class="panel flex flex-row justify-between m-10">
+    <div class="flex flex-col justify-between">
+        <h2 class="text-2xl font-medium">{{this.course.name}}</h2>
+        <p class="text-lg truncate">{{this.course.description}}</p>
     </div>
 
-    <div class="flex flex-row items-center">
-        <p class="p-3">{{this.course.students_count}} / {{this.course.max_student}}</p>
+    <div class="flex flex-col justify-between gap-4 p-2">
+        <p class="">Students: {{this.course.students_count}} / {{this.course.max_student}}</p>
       @if(this.role() == 'Teacher') {
           <button class="button-generic" (click)="this.router.navigate(['/course', this.course.id])">Show</button>
       } @else if (this.role() == 'Student') {

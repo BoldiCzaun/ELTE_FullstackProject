@@ -1,0 +1,60 @@
+ <div class="panel m-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    @if (this.isEdited()) {
+        <div class="flex flex-col w-full gap-2">
+            <div class="flex flex-row items-center gap-2">
+                <label>Name:</label>
+                <input type="text"
+                [(ngModel)]="editName"/>
+            </div>
+            <div class="flex flex-row items-center gap-1">
+                <label>Due by:</label>
+                <input type="datetime-local"
+                    [(ngModel)]="editDate"/>
+            </div>
+
+            <div class="flex flex-row items-center gap-1">
+                <label>Score Weight:</label>
+                <input type="number" min="0" max="100"
+                    [(ngModel)]="editTotalWeight"/>
+                %
+            </div>
+
+            <p class="error-text">{{this.editError()}}</p>
+        </div>
+
+        <div class="flex justify-end">
+            <button class="button-generic"
+                    (click)="saveRequirementEdit()">
+            Save
+            </button>
+        </div>
+    }
+    @else {
+        <div class="flex flex-col w-full">
+            <h2 class="text-lg font-semibold text-gray-800">
+                {{ this.requirement().name }}
+            </h2>
+
+            <p>Due by: {{this.requirement().begin | date : "dd/MM/yy HH:mm:ss"}}</p>
+            
+            <div class="mt-2 text-sm">
+                <p>Score Weight: {{this.requirement().total_score_weight * 100}}%</p>
+                @let repeatCount = this.requirement().repeat_count;
+                @if (repeatCount != null) {
+                    @let repeatSkip = this.requirement().repeat_skip;
+                    <p>Repeats every {{(repeatSkip != null && repeatSkip > 1) ? (repeatSkip + " weeks") : "week"}} (total: {{repeatCount}})</p>
+                }
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2 justify-end">
+            <button class="button-white" (click)="openScores()">
+                Scores
+            </button>
+
+            <button class="button-generic" (click)="startRequirementEdit()">
+                Edit
+            </button>
+        </div>
+    }
+</div>
