@@ -1,0 +1,60 @@
+<form [formGroup]="reqCreationForm" (submit)="onSubmitRequirement()">
+  <div class="mx-auto flex flex-col panel w-fit">
+    <p class="text-2xl font-bold pb-3">Create Requirement</p>
+    <div class="flex flex-row gap-3">
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-row items-center">
+          <p class="p-2">
+            Name:
+          </p>
+          <input id="name" type="text" formControlName="name" />
+        </div>
+        <div class="flex flex-row items-center">
+          <p class="p-2">
+            Starts:
+          </p>
+          <input id="begin" type="datetime-local" formControlName="begin" />
+        </div>
+        <div class="flex flex-row items-center">
+          <p class="p-2">
+            Score Weight:
+          </p>
+          <input id="scoreWeight" type="number" formControlName="scoreWeight" min="1" max="100"/>
+        </div>
+      </div>
+      
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-row items-center justify-between">
+          <p class="text-xl">Repeat Settings:</p>
+          <div class="flex flex-row gap-1 justify-center">
+            <input type="checkbox" id="repeatCountEnabled" formControlName="repeatCountEnabled" (change)="onRepeatCountEnableChanged()"/>
+          </div>
+        </div>
+        
+        @let countEnabled = this.reqCreationForm.get('repeatCountEnabled')!.value!;
+        @let isDisabled = !countEnabled;
+        <div class="flex flex-col" [style.opacity]="isDisabled ? 0.5 : 1">
+          <div class="flex flex-row items-center">
+            <p class="p-2">
+              Repeat Count:
+            </p>
+            <input id="repeatCount" type="number" min="1" formControlName="repeatCount" [disabled]="isDisabled"/>
+          </div>
+          <div class="flex flex-row items-center">
+            <p class="p-2">
+              Weeks in-betwen:
+            </p>
+            <input id="weeksInBetween" type="number" min="1" formControlName="weeksInBetween" [disabled]="isDisabled"/>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+    <div class="flex flex-col justify-center items-center">
+        <button class="m-3 mb-0 button-generic" type="submit">
+            Create
+        </button>
+        <p class="mt-2 error-text">{{this.creationError()}}</p>
+    </div>
+  </div>
+</form>

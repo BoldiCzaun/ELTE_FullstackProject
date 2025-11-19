@@ -1,74 +1,32 @@
 
-<div class="flex flex-row justify-between m-3 items-center">
+<div class="flex flex-row justify-between m-3 items-center gap-5">
     @if (this.isEditing()) {
         <input type="text" [(ngModel)]="editName"/>
         <button class="button-generic" (click)="saveEdit()">Save</button>
     }
     @else {
-        <p class="text-3xl p-3">{{this.course()?.name}}</p>
+        <p class="text-3xl font-semibold p-3">{{this.course()?.name}}</p>
         <button class="button-generic" (click)="startEdit()">Edit</button>
     }
 </div>
-
-<hr>
 
 @if (this.isEditing()) {
     <textarea rows="4" cols="100" [(ngModel)]="editDescription">
     </textarea>
 }
 @else {
-    <p class="p-3">{{this.course()?.description}}</p>
+    <p class="p-3 m-3">{{this.course()?.description}}</p>
 }
 
-<p class="p-3 text-3xl">Requirements</p>
-<form [formGroup]="reqCreationForm" (submit)="onSubmitRequirement()">
-  <table class="m-4 gap-4 border-spacing-10 border-3 border-separate border-stone-100 rounded-xl table-auto">
-      <thead>
-        <tr>
-          <td><h2>Placeholder gui!!!</h2> Name</td>
-          <td>Start Date (UTC)</td>
-          <td>Repeat Count</td>
-          <td>Weeks In-between</td>
-          <td>Score Weight</td>
-          <td>Actions</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-            <td>
-              <input id="name" type="text" formControlName="name" />
-            </td>
-            
-            <td>
-              <input id="begin" type="datetime-local" formControlName="begin" />
-            </td>
+<hr>
 
-            <td>
-              <label for="repeatCountEnabled">Use:</label>
-              <input type="checkbox" id="repeatCountEnabled" formControlName="repeatCountEnabled"/>
+<p class="p-3 m-3 text-3xl">Requirements</p>
 
-              @let countEnabled = this.reqCreationForm.get('repeatCountEnabled')?.value;
-              <input id="repeatCount" type="number" formControlName="repeatCount" [attr.disabled]="countEnabled != null ? !countEnabled : true"/>
-            </td>
+<app-create-requirement
+  [courseID]='(this.course()?.id ?? 0).toString()'
+  (onCreation)='this.refresh$.next()'
+/>
 
-            <td>
-              <input id="weeksInBetween" type="number" formControlName="weeksInBetween" [attr.disabled]="this.reqCreationForm.get('repeatCountEnabled')?.value ?? true"/>
-            </td>
-
-            <td>
-              <input id="scoreWeight" type="number" formControlName="scoreWeight" min="1" max="100"/>
-            </td>
-            
-            <td>
-              <button class="m-3 mb-0 button-generic" type="submit">
-                Create
-              </button>
-              <p class="error-text">{{this.creationError()}}</p>
-            </td>
-        </tr>
-      </tbody>
-  </table>
-</form>
 @for (req of this.requirements(); track $index) {
     <app-requirement-item 
       [courseID]='(this.course()?.id ?? 0).toString()'
