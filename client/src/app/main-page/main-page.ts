@@ -3,10 +3,11 @@ import { CourseList } from "../course-list/course-list";
 import {AuthService} from '../auth-service';
 import {Course, CourseService} from '../course-service';
 import {toSignal} from '@angular/core/rxjs-interop';
+import { AdminPage } from "../admin-page/admin-page";
 
 @Component({
   selector: 'app-main-page',
-  imports: [CourseList],
+  imports: [CourseList, AdminPage],
   templateUrl: './main-page.html',
   styleUrl: './main-page.css'
 })

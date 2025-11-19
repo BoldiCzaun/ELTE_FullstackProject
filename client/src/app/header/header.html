@@ -2,10 +2,7 @@
     <img class="h-18 w-30 object-scale-down pl-5 pr-10" src="placeholderlogo.png">
     <div class="flex p-2 pr-10 gap-4 justify-around items-center ">
         @if (user() != null) {
-            @if(role() == 'Admin') {
-                <button class="button-generic" (click)="toAdmin()">Admin Dashboard</button>
-            }
-            @else if (role() == 'Teacher') {
+            @if (role() == 'Teacher') {
                 <button class="button-generic" (click)="toCreateCourses()">Create Course</button>
             } @else if (role() == 'Student') {
               <button class="button-generic" (click)="toPickCourses()">Pick Course</button>

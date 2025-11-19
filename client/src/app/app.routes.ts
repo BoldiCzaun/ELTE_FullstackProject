@@ -52,11 +52,5 @@ export const routes: Routes = [
         component: ScoresPage,
         title: "Pontok nézet",
         canActivate: [authGuard, teacherGuard]
-    },
-    {
-        path: 'admin',
-        component: AdminPage,
-        title: "Adminisztrátor nézet",
-        canActivate: [authGuard, adminGuard]
     }
 ];

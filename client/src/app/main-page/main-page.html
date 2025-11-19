@@ -1,2 +1,7 @@
-<app-course-list/>
+@if (role() == 'Admin') {
+    <app-admin-page/>
+}
+@else {
+    <app-course-list/>
+}
 
