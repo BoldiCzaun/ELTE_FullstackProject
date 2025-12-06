@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RequirementItem } from '../requirement-item/requirement-item';
 import { CreateRequirement } from '../create-requirement/create-requirement';
+import {AuthService} from '../auth-service';
 
 @Component({
   selector: 'app-course-page',
@@ -15,6 +16,8 @@ import { CreateRequirement } from '../create-requirement/create-requirement';
 })
 export class CoursePage {
   private route = inject(ActivatedRoute);
+  protected authService = inject(AuthService);
+  protected role = toSignal(this.authService.role);
 
   // course edit fields
   protected editName: string = '';
@@ -72,7 +75,7 @@ export class CoursePage {
 
     this.courseService.update(course.id.toString(), courseData).subscribe(v => {
       if(!v) return;
-      
+
       this.course.set(v);
     });
   }

@@ -9,6 +9,7 @@
       @if(this.role() == 'Teacher') {
           <button class="button-generic" (click)="this.router.navigate(['/course', this.course.id])">Show</button>
       } @else if (this.role() == 'Student') {
+        @if (this.isCoursePicking()) {
             @if (this.isUserCourse) {
               <div class="button-white">
               Course already taken
@@ -22,6 +23,9 @@
                 Take
               </button>
             }
+        } @else {
+          <button class="button-generic" (click)="this.router.navigate(['/course', this.course.id])">Show</button>
+        }
       }
     </div>
 </div>

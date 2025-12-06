@@ -39,4 +39,8 @@ export class CourseItem {
     this.taken.emit(course);
     console.log("taking course")
   }
+
+  isCoursePicking(): boolean {
+    return this.router.url === '/courses'
+  }
 }

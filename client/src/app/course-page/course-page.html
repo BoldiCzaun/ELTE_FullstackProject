@@ -1,38 +1,53 @@
+@if (this.role() == 'Teacher') {
+  <h1 class="p-2 m-2 text-4xl">{{this.course()?.name}}</h1>
+  <div class="flex flex-row justify-between m-3 items-center gap-5">
+      @if (this.isEditing()) {
+          <input type="text" [(ngModel)]="editName"/>
+          <button class="button-generic" (click)="saveEdit()">Save</button>
+      }
+      @else {
+          <p class="text-3xl font-semibold p-3">{{this.course()?.name}}</p>
+          <button class="button-generic" (click)="startEdit()">Edit</button>
+      }
+  </div>
 
-<div class="flex flex-row justify-between m-3 items-center gap-5">
-    @if (this.isEditing()) {
-        <input type="text" [(ngModel)]="editName"/>
-        <button class="button-generic" (click)="saveEdit()">Save</button>
-    }
-    @else {
-        <p class="text-3xl font-semibold p-3">{{this.course()?.name}}</p>
-        <button class="button-generic" (click)="startEdit()">Edit</button>
-    }
-</div>
+  @if (this.isEditing()) {
+      <textarea rows="4" cols="100" [(ngModel)]="editDescription">
+      </textarea>
+  }
+  @else {
+      <p class="p-3 m-3">{{this.course()?.description}}</p>
+  }
 
-@if (this.isEditing()) {
-    <textarea rows="4" cols="100" [(ngModel)]="editDescription">
-    </textarea>
-}
-@else {
-    <p class="p-3 m-3">{{this.course()?.description}}</p>
-}
+  <hr>
 
-<hr>
+  <p class="p-3 m-3 text-3xl">Requirements</p>
 
-<p class="p-3 m-3 text-3xl">Requirements</p>
+  <app-create-requirement
+    [courseID]='(this.course()?.id ?? 0).toString()'
+    (onCreation)='this.refresh$.next()'
+  />
 
-<app-create-requirement
-  [courseID]='(this.course()?.id ?? 0).toString()'
-  (onCreation)='this.refresh$.next()'
-/>
+  @for (req of this.requirements(); track $index) {
+      <app-requirement-item
+        [courseID]='(this.course()?.id ?? 0).toString()'
+        [requirement]='req'
+        (onSave)='this.refresh$.next()'
+        (onDelete)='this.refresh$.next()'
+      />
+  }
+} @else {
+  <h1 class="p-2 m-2 text-4xl">{{this.course()?.name}}</h1>
+  <p class="p-3 m-3">{{this.course()?.description}}</p>
+  <p class="p-3 m-3 text-3xl">Requirements</p>
 
-@for (req of this.requirements(); track $index) {
-    <app-requirement-item 
+  @for (req of this.requirements(); track $index) {
+    <app-requirement-item
       [courseID]='(this.course()?.id ?? 0).toString()'
       [requirement]='req'
       (onSave)='this.refresh$.next()'
       (onDelete)='this.refresh$.next()'
     />
+  }
 }
 

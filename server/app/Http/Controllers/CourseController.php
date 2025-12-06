@@ -78,7 +78,12 @@ class CourseController extends Controller
             return abort(401, 'Nem vagy bejelentkezve!');
         }
 
-        if(!Auth::user()->role->teacher()) {
+        if(Auth::user()->role->student()) {
+            if(Auth::user()->student_courses()->where('course_id', $id)->get()->isEmpty()) {
+                return abort(401, 'Nincs ilyen kurzusod!');
+            }
+
+        } else if(!Auth::user()->role->teacher()) {
             return abort(401, 'Nem vagy tanár!');
         }
         else if(Auth::user()->id != $course->user_id) {
@@ -238,7 +243,7 @@ class CourseController extends Controller
         if(Auth::user()->id != $course->user_id) {
             return abort(401, 'Nem a saját kurzusod!');
         }
-        
+
         $course->requirements()->findOrFail($req_id)->delete();
 
         return response()->noContent();
@@ -284,7 +289,7 @@ class CourseController extends Controller
         ]);
 
         $requirement = Requirement::create($req);
-        
+
         return response()->json([
             'message' => 'Sikeres követelmény kreáció!',
             'requirement' => $requirement
@@ -317,7 +322,7 @@ class CourseController extends Controller
 
         $validated['user_id'] = Auth::user()->id;
         $course = Course::create($validated);
-        
+
         return response()->json([
             'message' => 'Sikeres tantárgy kreáció!',
             'course' => $course
@@ -354,7 +359,7 @@ class CourseController extends Controller
         }
 
         $course->update($validated);
-        
+
         return response()->json($course);
     }
 

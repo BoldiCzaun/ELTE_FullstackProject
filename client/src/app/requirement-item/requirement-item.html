@@ -36,7 +36,7 @@
             </h2>
 
             <p>Due by: {{this.requirement().begin | date : "dd/MM/yy HH:mm:ss"}}</p>
-            
+
             <div class="mt-2 text-sm">
                 <p>Score Weight: {{this.requirement().total_score_weight * 100}}%</p>
                 @let repeatCount = this.requirement().repeat_count;
@@ -66,18 +66,8 @@
         @else {
             <div class="flex flex-row gap-2">
                 <div class="flex flex-col gap-2 justify-end">
-                    <button class="button-white" (click)="openScores()">
+                    <button class="button-generic" (click)="openScores()">
                         Scores
-                    </button>
-                    
-                    <button class="button-generic" (click)="startRequirementEdit()">
-                        Edit
-                    </button>
-                </div>
-    
-                <div class="flex items-center">    
-                    <button class="button-critical" (click)="this.isDeleting.set(true)">
-                        Delete
                     </button>
                 </div>
             </div>

@@ -45,12 +45,12 @@ export const routes: Routes = [
         path: 'course/:id',
         component: CoursePage,
         title: "Tárgy nézet",
-        canActivate: [authGuard, teacherGuard]
+        canActivate: [authGuard]
     },
     {
         path: 'course/:id/:req_id/scores',
         component: ScoresPage,
         title: "Pontok nézet",
-        canActivate: [authGuard, teacherGuard]
+        canActivate: [authGuard]
     }
 ];

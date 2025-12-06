@@ -5,6 +5,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { User } from '../user-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
+import {AuthService} from '../auth-service';
 
 @Component({
   selector: 'app-scores-page',
@@ -16,6 +17,8 @@ export class ScoresPage {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   protected courseService = inject(CourseService);
+  protected authService = inject(AuthService);
+  protected role = toSignal(this.authService.role);
 
   protected scoreCreationForm = new FormGroup({
     score: new FormControl(50, [Validators.required]),

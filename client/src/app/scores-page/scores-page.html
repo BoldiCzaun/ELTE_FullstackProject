@@ -1,77 +1,113 @@
-<div class="flex justify-center  items-center flex-col">
-  @let validStudents = this.getValidStudents();
-  @let scores = this.scores();
+@let scores = this.scores();
+<h2 class="text-2xl font-medium">Scores</h2>
+@if (this.role() == 'Teacher') {
+  <div class="flex justify-center  items-center flex-col">
+    @let validStudents = this.getValidStudents();
 
-  @if (validStudents != null && validStudents.length > 0) {
-    <div class="flex justify-center">
-      <form [formGroup]="scoreCreationForm" (submit)="onSubmit()">
-        <label for="score">Score: </label>
-        <input id="score" type="number" min="0" max="100" formControlName="score" />
+    @if (validStudents != null && validStudents.length > 0) {
+      <div class="flex justify-center">
+        <form [formGroup]="scoreCreationForm" (submit)="onSubmit()">
+          <label for="score">Score: </label>
+          <input id="score" type="number" min="0" max="100" formControlName="score" />
 
-        <label for="user_id">Student:</label>
-        <select id="user_id" name="user_id" formControlName="user_id">
-          @for (student of validStudents; track $index) {
-            <option value="{{student.id}}">{{student.name}}</option>
-          }
-        </select>
-
-        @if (this.requirement?.repeat_count != null) {
-          <label for="requirement_num">Requirement number: </label>
-          <select id="requirement_num" name="requirement_num" formControlName="requirement_num">
-            @for (num of getRequirementNumForUserId(); track $index) {
-              <option value="{{num}}">{{num + 1}}. instance</option>
+          <label for="user_id">Student:</label>
+          <select id="user_id" name="user_id" formControlName="user_id">
+            @for (student of validStudents; track $index) {
+              <option value="{{student.id}}">{{student.name}}</option>
             }
           </select>
-        }
 
-        <button class="m-3 mb-0 button-generic" type="submit">
-            Submit Score
-        </button>
+          @if (this.requirement?.repeat_count != null) {
+            <label for="requirement_num">Requirement number: </label>
+            <select id="requirement_num" name="requirement_num" formControlName="requirement_num">
+              @for (num of getRequirementNumForUserId(); track $index) {
+                <option value="{{num}}">{{num + 1}}. instance</option>
+              }
+            </select>
+          }
 
-      </form>
-    </div>
-  }
+          <button class="m-3 mb-0 button-generic" type="submit">
+              Submit Score
+          </button>
 
+        </form>
+      </div>
+    }
+
+    @if (scores != null && scores.length > 0) {
+      <table class="panel m-4 gap-4 border-spacing-10 border-3 border-separate border-stone-100 rounded-xl table-auto">
+        <thead>
+          <tr>
+            <td>Score</td>
+            <td>Student</td>
+            @if (this.requirement?.repeat_count) {
+              <td>Requirement Number</td>
+            }
+            <td>Actions</td>
+          </tr>
+        </thead>
+        <tbody>
+          @for (score of scores; track $index) {
+              <tr>
+                @if (score.id == this.selectedEdit()) {
+                  <td>
+                    <form [formGroup]="scoreEditForm">
+                      <input id="score" type="number" min="0" max="100" formControlName="score" />
+                    </form>
+                  </td>
+                }
+                @else {
+                  <td>{{score.score}}</td>
+                }
+
+                <td>{{score.user_name}}</td>
+                @if (this.requirement?.repeat_count) {
+                  <td>{{score.requirement_num}}</td>
+                }
+
+                @if (score.id == this.selectedEdit()) {
+                  <td><button class="button-generic" (click)="saveEdit()">Save</button></td>
+                }
+                @else {
+                  <td><button class="button-generic" (click)="setEdit(score.id)">Edit</button></td>
+                }
+              </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+} @else {
   @if (scores != null && scores.length > 0) {
     <table class="panel m-4 gap-4 border-spacing-10 border-3 border-separate border-stone-100 rounded-xl table-auto">
       <thead>
-        <tr>
-          <td>Score</td>
-          <td>Student</td>
-          @if (this.requirement?.repeat_count) {
-            <td>Requirement Number</td>
-          }
-          <td>Actions</td>
-        </tr>
+      <tr>
+        <td>Score</td>
+        @if (this.requirement?.repeat_count) {
+          <td>Requirement Number</td>
+        }
+      </tr>
       </thead>
       <tbody>
         @for (score of scores; track $index) {
-            <tr>
-              @if (score.id == this.selectedEdit()) {
-                <td>
-                  <form [formGroup]="scoreEditForm">   
-                    <input id="score" type="number" min="0" max="100" formControlName="score" />
-                  </form>
-                </td>
-              }
-              @else {
-                <td>{{score.score}}</td>
-              }
+          <tr>
+            @if (score.id == this.selectedEdit()) {
+              <td>
+                <form [formGroup]="scoreEditForm">
+                  <input id="score" type="number" min="0" max="100" formControlName="score" />
+                </form>
+              </td>
+            }
+            @else {
+              <td>{{score.score}}</td>
+            }
 
-              <td>{{score.user_name}}</td>
-              @if (this.requirement?.repeat_count) {
-                <td>{{score.requirement_num}}</td>
-              }
-
-              @if (score.id == this.selectedEdit()) {
-                <td><button class="button-generic" (click)="saveEdit()">Save</button></td>
-              }
-              @else {
-                <td><button class="button-generic" (click)="setEdit(score.id)">Edit</button></td>
-              }
-            </tr>
+            @if (this.requirement?.repeat_count) {
+              <td>{{score.requirement_num}}</td>
+            }
+          </tr>
         }
       </tbody>
     </table>
   }
-</div>
+}
