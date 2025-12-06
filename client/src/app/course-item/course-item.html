@@ -9,13 +9,19 @@
       @if(this.role() == 'Teacher') {
           <button class="button-generic" (click)="this.router.navigate(['/course', this.course.id])">Show</button>
       } @else if (this.role() == 'Student') {
-          <button class="button-generic" [disabled]="!this.canBePicked()" (click)="this.takeCourse()">
             @if (this.isUserCourse) {
+              <div class="button-white">
               Course already taken
+              </div>
+            } @else if (!this.isCourseHaveSpace()) {
+              <div class="button-white">
+                Course is full
+              </div>
             } @else {
-              Take
+              <button class="button-generic" (click)="this.takeCourse()">
+                Take
+              </button>
             }
-          </button>
       }
     </div>
 </div>

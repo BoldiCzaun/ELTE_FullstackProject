@@ -20,13 +20,13 @@ export class CourseItem {
   @Input() course!: Course;
   @Output() taken = new EventEmitter<Course>();
 
-  canBePicked(): boolean {
+  isCourseHaveSpace(): boolean {
     let course = this.course as Course
     let maxStudent= course.max_student as number;
     let studentCount = course.students_count as number;
 
 
-    return maxStudent > studentCount && !this.isUserCourse;
+    return maxStudent > studentCount;
   }
 
   takeCourse() {

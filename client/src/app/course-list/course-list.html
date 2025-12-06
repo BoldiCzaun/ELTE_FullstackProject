@@ -1,5 +1,5 @@
 @if (role() != null) {
-    @if(role() == 'Teacher') {
+    @if(role() == 'Teacher' || role() == 'Student') {
         @for (item of this.courses(); track $index) {
             <app-course-item [course]="item"/>
         }
