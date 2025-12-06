@@ -3,9 +3,18 @@
     <div class="flex p-2 pr-10 gap-4 justify-around items-center ">
         @if (user() != null) {
             @if (role() == 'Teacher') {
+              @if(this.isMainPage()){
                 <button class="button-generic" (click)="toCreateCourses()">Create Course</button>
+              } @else {
+                <button class="button-generic" (click)="toMainPage()">My Courses</button>
+
+              }
             } @else if (role() == 'Student') {
-              <button class="button-generic" (click)="toPickCourses()">Pick Course</button>
+              @if(this.isMainPage()){
+                <button class="button-generic" (click)="toPickCourses()">Pick Course</button>
+              } @else {
+                <button class="button-generic" (click)="toMainPage()">My Courses</button>
+              }
             }
 
             <div class="border-l-2">

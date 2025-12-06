@@ -31,4 +31,12 @@ export class Header {
   toPickCourses() {
     this.router.navigate(['/courses']);
   }
+
+  toMainPage() {
+    this.router.navigate(['/']);
+  }
+
+  isMainPage(): boolean {
+    return this.router.url === '/' || this.router.url === '';
+  }
 }
