@@ -79,6 +79,7 @@
   </div>
 } @else {
   @if (scores != null && scores.length > 0) {
+    <div class="flex justify-center  items-center flex-col">
     <table class="panel m-4 gap-4 border-spacing-10 border-3 border-separate border-stone-100 rounded-xl table-auto">
       <thead>
       <tr>
@@ -91,16 +92,7 @@
       <tbody>
         @for (score of scores; track $index) {
           <tr>
-            @if (score.id == this.selectedEdit()) {
-              <td>
-                <form [formGroup]="scoreEditForm">
-                  <input id="score" type="number" min="0" max="100" formControlName="score" />
-                </form>
-              </td>
-            }
-            @else {
-              <td>{{score.score}}</td>
-            }
+            <td>{{score.score}}</td>
 
             @if (this.requirement?.repeat_count) {
               <td>{{score.requirement_num}}</td>
@@ -109,5 +101,6 @@
         }
       </tbody>
     </table>
+  </div>
   }
 }

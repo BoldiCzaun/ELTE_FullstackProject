@@ -92,18 +92,20 @@ export class ScoresPage {
 
     this.requirement = this.router.currentNavigation()?.extras.state as Requirement | null;
 
-    this.courseService.getStudents(id).subscribe(v => {
-      if(!v) return;
+    if(this.role() == 'Teacher') {
+      this.courseService.getStudents(id).subscribe(v => {
+        if(!v) return;
 
-      this.students.set(v);
+        this.students.set(v);
 
-      let requirement_nums = this.getRequirementNum(v[0].id);
+        let requirement_nums = this.getRequirementNum(v[0].id);
 
-      this.scoreCreationForm.patchValue({
-        user_id: v[0].id,
-        requirement_num: requirement_nums[0]
-      })
-    });
+        this.scoreCreationForm.patchValue({
+          user_id: v[0].id,
+          requirement_num: requirement_nums[0]
+        })
+      });
+    }
   }
 
   getRequirementNum(user_id: number) {
