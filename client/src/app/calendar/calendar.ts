@@ -19,7 +19,6 @@ import { Subject } from 'rxjs';
 export class Calendar {
   protected courseService = inject(CourseService);
 
-  protected loaded = signal(false);
   protected refresh = new Subject<void>();
   protected view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
@@ -29,16 +28,19 @@ export class Calendar {
 
   protected setView(view: CalendarView) {
     this.view = view;
+    this.refresh.next();
   }
 
   constructor() {
     this.courseService.getUserCourses().subscribe(v => {
         if(!v) return;
 
-        let convertedEvents: CalendarEvent[] = [];
         for (const course of v) {
           this.courseService.getRequirements(course.id.toString()).subscribe(req => {
             if(!req) return;
+            
+            let convertedEvents: CalendarEvent[] = [];
+
             for (const requirement of req) {
               let event: CalendarEvent = {
                 title: course.name + " - " + requirement.name,
@@ -63,15 +65,11 @@ export class Calendar {
                 convertedEvents.push(event);  
               }
             }
+          
+            this.events.update(arr => arr.concat(convertedEvents));
+            this.refresh.next();
           })
         }
-
-        this.events.set(convertedEvents);
-        
-        this.setView(CalendarView.Month);
-        this.refresh.next();
-        this.loaded.set(true);
-
       });
 
   }

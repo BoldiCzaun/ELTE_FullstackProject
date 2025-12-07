@@ -10,7 +10,10 @@
 
               }
             } @else if (role() == 'Student') {
-              <button class="button-generic" (click)="toCalendar()">Calendar</button>
+              @if (!this.isCalendar()) {
+                <button class="button-generic" (click)="toCalendar()">Calendar</button>
+              }
+              
               @if(this.isMainPage()){
                 <button class="button-generic" (click)="toPickCourses()">Pick Course</button>
               } @else {

@@ -40,6 +40,10 @@ export class Header {
     this.router.navigate(['/']);
   }
 
+  isCalendar(): boolean {
+    return this.router.url === '/calendar';
+  }
+
   isMainPage(): boolean {
     return this.router.url === '/' || this.router.url === '';
   }
