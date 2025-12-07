@@ -11,6 +11,7 @@ import { CreateCoursePage } from './create-course-page/create-course-page';
 import { ScoresPage } from './scores-page/scores-page';
 import {TakeCoursePage} from './take-course-page/take-course-page';
 import {studentGuard} from './student-guard';
+import { CalendarPage } from './calendar-page/calendar-page';
 
 export const routes: Routes = [
     {
@@ -28,6 +29,12 @@ export const routes: Routes = [
       path: 'register',
       component: RegisterPage,
       title: "Regisztráció"
+    },
+    {
+      path: 'calendar',
+      component: CalendarPage,
+      title: "Naptár nézet",
+      canActivate: [authGuard, studentGuard]
     },
     {
       path: 'courses',

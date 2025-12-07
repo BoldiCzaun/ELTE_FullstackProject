@@ -1,0 +1,76 @@
+<div class="flex flex-col">
+  <div class="flex flex-row justify-around">
+    <div class="flex flex-row justify-around gap-4">
+      <div
+        class="button-generic"
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+      >
+        Previous
+      </div>
+      <div
+        class="button-white"
+        mwlCalendarToday
+        [(viewDate)]="viewDate"
+      >
+        Today
+      </div>
+      <div
+        class="button-generic"
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+      >
+        Next
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row justify-around">
+    <h3 class="text-lg">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+  </div>
+  <div class="flex flex-row justify-around">
+    <div class="flex flex-row justify-around gap-4">
+      <div
+        [class]="view === CalendarView.Month ? 'button-white' : 'button-generic'"
+        (click)="setView(CalendarView.Month)"
+      >
+        Month
+      </div>
+      <div
+        [class]="view === CalendarView.Week ? 'button-white' : 'button-generic'"
+        (click)="setView(CalendarView.Week)"
+      >
+        Week
+      </div>
+      <div
+        [class]="view === CalendarView.Day ? 'button-white' : 'button-generic'"
+        (click)="setView(CalendarView.Day)"
+      >
+        Day
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+    @switch (view) { @case (CalendarView.Month) {
+    <mwl-calendar-month-view
+        [viewDate]="viewDate"
+        [events]="events()"
+        [refresh]="refresh"
+    />
+    } @case (CalendarView.Week) {
+    <mwl-calendar-week-view
+        [viewDate]="viewDate"
+        [events]="events()"
+        [refresh]="refresh"
+    />
+    } @case (CalendarView.Day) {
+    <mwl-calendar-day-view
+        [viewDate]="viewDate"
+        [events]="events()"
+        [refresh]="refresh"
+    />
+    } }
+</div>
