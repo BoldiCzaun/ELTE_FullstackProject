@@ -1,5 +1,5 @@
-import { Component, EventEmitter, inject, input, Output, signal } from '@angular/core';
-import { CourseService, Requirement, RequirementData } from '../course-service';
+import { Component, effect, EventEmitter, inject, input, Output, signal } from '@angular/core';
+import { CourseService, Requirement, RequirementData, Score } from '../course-service';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -22,6 +22,8 @@ export class RequirementItem {
 
   protected role = toSignal(this.authService.role);
 
+  protected scores = signal<Score[] | null>(null);
+
   protected isDeleting = signal(false);
   protected isEdited = signal(false);
 
@@ -34,7 +36,13 @@ export class RequirementItem {
   @Output() onDelete = new EventEmitter();
 
   constructor() {
-
+    effect(() => {
+      if(this.role() == 'Student') {
+        this.courseService.getCourseScores(this.courseID(), this.requirement().id.toString()).subscribe(scores => {
+          this.scores.set(scores);
+        });
+      }
+    });
   }
 
   protected startRequirementEdit() { 

@@ -66,9 +66,29 @@
         @else {
             <div class="flex flex-row gap-2">
                 <div class="flex flex-col gap-2 justify-end">
-                    <button class="button-white" (click)="openScores()">
-                        Scores
-                    </button>
+                    @if (this.role() == 'Teacher') {
+                        <button class="button-white" (click)="openScores()">
+                            Scores
+                        </button>
+                    }
+                    @else {
+                        @let scores = this.scores();
+                        @if (scores == null || scores.length == 0) {
+                            <p>No scores yet</p>
+                        }
+                        @else if (this.requirement().repeat_count != null) {
+                            <button class="button-generic" (click)="openScores()">
+                                Scores
+                            </button>
+                        }
+                        @else {
+                            <div class="flex flex-col items-center pr-5">
+                                <p class="text-lg">Score </p>
+                                <p class="text-gray-800"> {{scores[0].score}}</p>
+                            </div>
+                            
+                        }
+                    } 
                     
                     @if (this.role() == 'Teacher') {
                         <button class="button-generic" (click)="startRequirementEdit()">
