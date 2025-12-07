@@ -32,6 +32,10 @@ export class Header {
     this.router.navigate(['/courses']);
   }
 
+  toCalendar() {
+    this.router.navigate(['/calendar']);
+  }
+
   toMainPage() {
     this.router.navigate(['/']);
   }

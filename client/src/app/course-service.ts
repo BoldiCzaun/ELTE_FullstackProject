@@ -195,7 +195,7 @@ export class CourseService {
 
   getAllCourses() {
     let url = "/api/courses";
-    return this.http.get(url)
+    return this.http.get<Course[]>(url)
   }
 
   getCourseScores(id: string, req_id: string) {
