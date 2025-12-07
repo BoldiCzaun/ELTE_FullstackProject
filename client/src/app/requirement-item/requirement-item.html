@@ -66,10 +66,24 @@
         @else {
             <div class="flex flex-row gap-2">
                 <div class="flex flex-col gap-2 justify-end">
-                    <button class="button-generic" (click)="openScores()">
+                    <button class="button-white" (click)="openScores()">
                         Scores
                     </button>
+                    
+                    @if (this.role() == 'Teacher') {
+                        <button class="button-generic" (click)="startRequirementEdit()">
+                            Edit
+                        </button>
+                    }
                 </div>
+    
+                @if (this.role() == 'Teacher') {
+                    <div class="flex items-center">    
+                        <button class="button-critical" (click)="this.isDeleting.set(true)">
+                            Delete
+                        </button>
+                    </div>
+                }
             </div>
         }
     }

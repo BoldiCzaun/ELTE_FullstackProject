@@ -3,6 +3,8 @@ import { CourseService, Requirement, RequirementData } from '../course-service';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth-service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-requirement-item',
@@ -14,8 +16,11 @@ export class RequirementItem {
   public courseID = input.required<string>();
   public requirement = input.required<Requirement>();
 
+  protected authService = inject(AuthService);
   protected router = inject(Router);
   protected courseService = inject(CourseService);
+
+  protected role = toSignal(this.authService.role);
 
   protected isDeleting = signal(false);
   protected isEdited = signal(false);
@@ -27,6 +32,10 @@ export class RequirementItem {
 
   @Output() onSave = new EventEmitter();
   @Output() onDelete = new EventEmitter();
+
+  constructor() {
+
+  }
 
   protected startRequirementEdit() { 
     this.isEdited.set(true);

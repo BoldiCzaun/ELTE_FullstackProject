@@ -1,5 +1,4 @@
 @if (this.role() == 'Teacher') {
-  <h1 class="p-2 m-2 text-4xl">{{this.course()?.name}}</h1>
   <div class="flex flex-row justify-between m-3 items-center gap-5">
       @if (this.isEditing()) {
           <input type="text" [(ngModel)]="editName"/>
