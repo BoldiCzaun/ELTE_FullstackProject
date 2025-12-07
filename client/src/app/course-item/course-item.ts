@@ -31,12 +31,13 @@ export class CourseItem {
 
   takeCourse() {
     let course = this.course as Course;
-    this.courseService.takeCourse(course.id.toString()).subscribe(success => {
-      if(success) {
+    this.courseService.takeCourse(course.id.toString()).subscribe(course => {
+      if(course) {
         console.log("successfully taken subject x");
+        this.taken.emit(course);
       }
     });
-    this.taken.emit(course);
+    
     console.log("taking course")
   }
 

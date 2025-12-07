@@ -37,6 +37,10 @@ export class TakeCoursePage {
 
   onCourseTaken(course: Course) {
     console.log("on course taken")
+
+    // updateljük a courses-t is hogy frissüljön a student count amikor felveszed a tárgyat
+    this.courses.update(list => list.map(c => c.id === course.id ? course : c));
+    
     this.userCourses.update(list => list.some(c => c.id === course.id) ? list : [...list, course]);
   }
 }

@@ -255,7 +255,7 @@ export class CourseService {
   takeCourse(id: string) {
     let url = "/api/user/courses/" + id;
 
-    return this.http.post(url, null).pipe(
+    return this.http.post<Course>(url, null).pipe(
       tap(resp => {
         return of(resp);
       }),
