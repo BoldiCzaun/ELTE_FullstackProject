@@ -82,8 +82,17 @@ class CourseController extends Controller
             if(Auth::user()->student_courses()->where('course_id', $id)->get()->isEmpty()) {
                 return abort(401, 'Nincs ilyen kurzusod!');
             }
-
-        } else if(!Auth::user()->role->teacher()) {
+            
+            return response()->json($course
+                ->requirements()
+                ->findOrFail($req_id)
+                ->scores()
+                ->where('user_id', Auth::user()->id)
+                ->orderBy('requirement_num')
+                ->get()
+            );
+        }
+        else if(!Auth::user()->role->teacher()) {
             return abort(401, 'Nem vagy tanár!');
         }
         else if(Auth::user()->id != $course->user_id) {
