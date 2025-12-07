@@ -40,7 +40,7 @@ class UserController extends Controller
 
         Auth::user()->student_courses()->attach($id);
 
-        return response()->noContent();
+        return response()->json($course);
     }
 
     public function getCourses() {
